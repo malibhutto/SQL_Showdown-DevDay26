@@ -1,0 +1,131 @@
+/* ========================================
+   SQL SHOWDOWN - COMPETITION PLAY (CYBER)
+   HUD IDE Interface
+   ======================================== */
+
+@keyframes progressFill {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes sweepScan {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(200vw);
+  }
+}
+
+/* Fullscreen Loading Overlay */
+.loading-fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-base);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px;
+}
+
+.loading-logo {
+  animation: glitchHack 4s infinite, pulseGlow 3s ease-in-out infinite alternate;
+}
+
+.glow-text-danger {
+  text-shadow: 0 0 10px rgba(255, 107, 107, 0.8), 0 0 30px rgba(255, 107, 107, 0.4);
+}
+
+.glow-text-gold {
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.8), 0 0 20px rgba(251, 191, 36, 0.4);
+}
+
+/* Main Container overrides */
+.play-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-base);
+  overflow: hidden;
+}
+
+/* HUD Top Bar */
+.play-hud-bar {
+  height: 56px;
+  background: rgba(2, 6, 23, 0.95);
+  border-bottom: 1px solid rgba(124, 157, 255, 0.25);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  flex-shrink: 0;
+  position: relative;
+  box-shadow: 0 1px 15px rgba(0, 0, 0, 0.5);
+  z-index: 50;
+}
+
+.hud-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logout-button {
+  background: transparent;
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  color: var(--danger);
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-family: 'Orbitron', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Scanning line on HUD */
+.hud-sweep-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, transparent, rgba(124, 157, 255, 0.6), transparent);
+  box-shadow: 0 0 10px rgba(124, 157, 255, 0.8);
+  animation: sweepScan 6s linear infinite;
+  pointer-events: none;
+}
+
+.question-selector-tabs {
+  z-index: 40;
+}
+
+/* Scrollbar tweaks for tabs */
+.question-selector-tabs::-webkit-scrollbar {
+  height: 2px;
+}
+
+.question-selector-tabs::-webkit-scrollbar-thumb {
+  background: rgba(124, 157, 255, 0.3);
+}
+
+@media (max-width: 1024px) {
+  .play-hud-bar {
+    padding: 0 12px;
+  }
+
+  .hud-team-badge span {
+    display: none;
+  }
+}

@@ -1,0 +1,61 @@
+/* ========================================
+   SQL SHOWDOWN - LIVE LEADERBOARD (CYBER)
+   Gold/Silver/Bronze Spotlight Ranks
+   ======================================== */
+
+.live-leaderboard-page {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Base tailwind variables for specific colors if not in root */
+:root {
+  --gold: #FFD700;
+  --silver: #C0C0C0;
+  --bronze: #CD7F32;
+}
+
+.text-gold { color: var(--gold); }
+.text-silver { color: var(--silver); }
+.text-bronze { color: var(--bronze); }
+.border-gold { border-color: var(--gold); }
+.border-silver { border-color: var(--silver); }
+.border-bronze { border-color: var(--bronze); }
+.bg-gold\/10 { background-color: rgba(255, 215, 0, 0.1); }
+.bg-silver\/10 { background-color: rgba(192, 192, 192, 0.1); }
+.bg-bronze\/10 { background-color: rgba(205, 127, 50, 0.1); }
+.bg-gold { background-color: var(--gold); }
+
+/* Rank Specific Row Styling */
+
+.table-row.rank-gold {
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0.02) 50%, rgba(0,0,0,0.6) 100%);
+  border-left: 3px solid var(--gold);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.3) !important;
+}
+
+.table-row.rank-silver {
+  background: linear-gradient(90deg, rgba(192, 192, 192, 0.1) 0%, rgba(192, 192, 192, 0.02) 50%, rgba(0,0,0,0.6) 100%);
+  border-left: 3px solid var(--silver);
+  border-bottom: 1px solid rgba(192, 192, 192, 0.3) !important;
+}
+
+.table-row.rank-bronze {
+  background: linear-gradient(90deg, rgba(205, 127, 50, 0.1) 0%, rgba(205, 127, 50, 0.02) 50%, rgba(0,0,0,0.6) 100%);
+  border-left: 3px solid var(--bronze);
+  border-bottom: 1px solid rgba(205, 127, 50, 0.3) !important;
+}
+
+/* Hover affects */
+.table-row.rank-gold:hover {
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 215, 0, 0.05) 50%, rgba(0,0,0,0.8) 100%);
+}
+
+.table-row.rank-silver:hover {
+  background: linear-gradient(90deg, rgba(192, 192, 192, 0.2) 0%, rgba(192, 192, 192, 0.05) 50%, rgba(0,0,0,0.8) 100%);
+}
+
+.table-row.rank-bronze:hover {
+  background: linear-gradient(90deg, rgba(205, 127, 50, 0.2) 0%, rgba(205, 127, 50, 0.05) 50%, rgba(0,0,0,0.8) 100%);
+}

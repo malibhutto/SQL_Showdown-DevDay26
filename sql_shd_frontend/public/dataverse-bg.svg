@@ -1,0 +1,274 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0805;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#0f0a05;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a1005;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="goldGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:0" />
+      <stop offset="50%" style="stop-color:#fbbf24;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:0" />
+    </linearGradient>
+    
+    <linearGradient id="amberGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0" />
+      <stop offset="50%" style="stop-color:#f59e0b;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:0" />
+    </linearGradient>
+    
+    <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:0.3" />
+      <stop offset="40%" style="stop-color:#f59e0b;stop-opacity:0.15" />
+      <stop offset="100%" style="stop-color:#b8860b;stop-opacity:0" />
+    </radialGradient>
+    
+    <radialGradient id="nodeGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#f59e0b;stop-opacity:0.5" />
+      <stop offset="100%" style="stop-color:#b8860b;stop-opacity:0" />
+    </radialGradient>
+    
+    <!-- Filters -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <filter id="softGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Patterns -->
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#fbbf24" stroke-width="0.3" opacity="0.15"/>
+    </pattern>
+    
+    <pattern id="smallGrid" width="15" height="15" patternUnits="userSpaceOnUse">
+      <path d="M 15 0 L 0 0 0 15" fill="none" stroke="#f59e0b" stroke-width="0.2" opacity="0.08"/>
+    </pattern>
+    
+    <!-- Circuit Pattern -->
+    <pattern id="circuit" width="200" height="200" patternUnits="userSpaceOnUse">
+      <path d="M20,100 L80,100 L80,60 L120,60" fill="none" stroke="#b8860b" stroke-width="1" opacity="0.2"/>
+      <path d="M100,20 L100,80 L140,80 L140,140" fill="none" stroke="#b8860b" stroke-width="1" opacity="0.15"/>
+      <path d="M160,100 L180,100 L180,160 L140,160" fill="none" stroke="#b8860b" stroke-width="1" opacity="0.2"/>
+      <circle cx="80" cy="100" r="3" fill="#fbbf24" opacity="0.4"/>
+      <circle cx="120" cy="60" r="3" fill="#f59e0b" opacity="0.3"/>
+      <circle cx="140" cy="140" r="3" fill="#fbbf24" opacity="0.4"/>
+    </pattern>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="url(#bgGradient)"/>
+  
+  <!-- Small Grid -->
+  <rect width="100%" height="100%" fill="url(#smallGrid)"/>
+  
+  <!-- Main Grid -->
+  <rect width="100%" height="100%" fill="url(#grid)"/>
+  
+  <!-- Circuit Pattern Overlay -->
+  <rect width="100%" height="100%" fill="url(#circuit)" opacity="0.5"/>
+  
+  <!-- Central Sun/Portal Glow -->
+  <ellipse cx="960" cy="540" rx="600" ry="400" fill="url(#sunGlow)"/>
+  <ellipse cx="960" cy="540" rx="300" ry="200" fill="url(#sunGlow)" opacity="0.5"/>
+  
+  <!-- Horizon Line -->
+  <line x1="0" y1="700" x2="1920" y2="700" stroke="url(#goldGlow)" stroke-width="2" filter="url(#softGlow)"/>
+  
+  <!-- Perspective Grid Lines to Horizon -->
+  <g opacity="0.3">
+    <line x1="960" y1="700" x2="0" y2="1080" stroke="#fbbf24" stroke-width="0.5"/>
+    <line x1="960" y1="700" x2="192" y2="1080" stroke="#fbbf24" stroke-width="0.5"/>
+    <line x1="960" y1="700" x2="384" y2="1080" stroke="#fbbf24" stroke-width="0.5"/>
+    <line x1="960" y1="700" x2="576" y2="1080" stroke="#fbbf24" stroke-width="0.5"/>
+    <line x1="960" y1="700" x2="768" y2="1080" stroke="#fbbf24" stroke-width="0.5"/>
+    <line x1="960" y1="700" x2="1152" y2="1080" stroke="#fbbf24" stroke-width="0.5"/>
+    <line x1="960" y1="700" x2="1344" y2="1080" stroke="#fbbf24" stroke-width="0.5"/>
+    <line x1="960" y1="700" x2="1536" y2="1080" stroke="#fbbf24" stroke-width="0.5"/>
+    <line x1="960" y1="700" x2="1728" y2="1080" stroke="#fbbf24" stroke-width="0.5"/>
+    <line x1="960" y1="700" x2="1920" y2="1080" stroke="#fbbf24" stroke-width="0.5"/>
+  </g>
+  
+  <!-- Horizontal Perspective Lines -->
+  <g opacity="0.2">
+    <line x1="200" y1="750" x2="1720" y2="750" stroke="#f59e0b" stroke-width="0.5"/>
+    <line x1="100" y1="800" x2="1820" y2="800" stroke="#f59e0b" stroke-width="0.5"/>
+    <line x1="50" y1="850" x2="1870" y2="850" stroke="#f59e0b" stroke-width="0.5"/>
+    <line x1="0" y1="900" x2="1920" y2="900" stroke="#f59e0b" stroke-width="0.5"/>
+    <line x1="0" y1="950" x2="1920" y2="950" stroke="#f59e0b" stroke-width="0.5"/>
+    <line x1="0" y1="1000" x2="1920" y2="1000" stroke="#f59e0b" stroke-width="0.5"/>
+    <line x1="0" y1="1050" x2="1920" y2="1050" stroke="#f59e0b" stroke-width="0.5"/>
+  </g>
+  
+  <!-- Data Streams - Vertical -->
+  <g filter="url(#glow)">
+    <rect x="150" y="0" width="2" height="400" fill="url(#amberGlow)" opacity="0.6">
+      <animate attributeName="y" values="0;680;0" dur="8s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="350" y="200" width="1.5" height="300" fill="url(#amberGlow)" opacity="0.4">
+      <animate attributeName="y" values="200;580;200" dur="6s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="550" y="100" width="2" height="350" fill="url(#amberGlow)" opacity="0.5">
+      <animate attributeName="y" values="100;450;100" dur="7s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="1350" y="50" width="1.5" height="380" fill="url(#amberGlow)" opacity="0.5">
+      <animate attributeName="y" values="50;420;50" dur="9s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="1550" y="150" width="2" height="320" fill="url(#amberGlow)" opacity="0.4">
+      <animate attributeName="y" values="150;530;150" dur="5s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="1750" y="0" width="1.5" height="400" fill="url(#amberGlow)" opacity="0.6">
+      <animate attributeName="y" values="0;600;0" dur="7s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+  
+  <!-- Floating Data Nodes -->
+  <g filter="url(#softGlow)">
+    <!-- Left side nodes -->
+    <circle cx="100" cy="200" r="4" fill="#fbbf24" opacity="0.8">
+      <animate attributeName="opacity" values="0.8;0.3;0.8" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="200" cy="350" r="3" fill="#f59e0b" opacity="0.6">
+      <animate attributeName="opacity" values="0.6;0.2;0.6" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="80" cy="500" r="5" fill="#fbbf24" opacity="0.7">
+      <animate attributeName="opacity" values="0.7;0.3;0.7" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="250" cy="150" r="3" fill="#b8860b" opacity="0.5">
+      <animate attributeName="opacity" values="0.5;0.2;0.5" dur="3.5s" repeatCount="indefinite"/>
+    </circle>
+    
+    <!-- Right side nodes -->
+    <circle cx="1820" cy="180" r="4" fill="#fbbf24" opacity="0.8">
+      <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2.8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1720" cy="400" r="3" fill="#f59e0b" opacity="0.6">
+      <animate attributeName="opacity" values="0.6;0.2;0.6" dur="3.2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1850" cy="550" r="5" fill="#fbbf24" opacity="0.7">
+      <animate attributeName="opacity" values="0.7;0.3;0.7" dur="4.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1680" cy="250" r="3" fill="#b8860b" opacity="0.5">
+      <animate attributeName="opacity" values="0.5;0.2;0.5" dur="2.2s" repeatCount="indefinite"/>
+    </circle>
+    
+    <!-- Top nodes -->
+    <circle cx="500" cy="80" r="3" fill="#fbbf24" opacity="0.6">
+      <animate attributeName="opacity" values="0.6;0.2;0.6" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="700" cy="120" r="4" fill="#f59e0b" opacity="0.5">
+      <animate attributeName="opacity" values="0.5;0.2;0.5" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1200" cy="100" r="3" fill="#fbbf24" opacity="0.7">
+      <animate attributeName="opacity" values="0.7;0.3;0.7" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1400" cy="60" r="4" fill="#b8860b" opacity="0.6">
+      <animate attributeName="opacity" values="0.6;0.2;0.6" dur="3.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Connection Lines between nodes -->
+  <g stroke="#fbbf24" stroke-width="0.5" opacity="0.2">
+    <line x1="100" y1="200" x2="200" y2="350"/>
+    <line x1="200" y1="350" x2="80" y2="500"/>
+    <line x1="250" y1="150" x2="500" y2="80"/>
+    <line x1="500" y1="80" x2="700" y2="120"/>
+    <line x1="1200" y1="100" x2="1400" y2="60"/>
+    <line x1="1680" y1="250" x2="1820" y2="180"/>
+    <line x1="1720" y1="400" x2="1850" y2="550"/>
+  </g>
+  
+  <!-- Mountains/Structures Silhouette -->
+  <g fill="#0a0805" opacity="0.9">
+    <!-- Left mountain/structure -->
+    <polygon points="0,700 150,500 200,550 280,450 350,520 400,700"/>
+    <!-- Right mountain/structure -->
+    <polygon points="1520,700 1580,520 1650,580 1720,480 1800,530 1850,470 1920,550 1920,700"/>
+  </g>
+  
+  <!-- Building Silhouettes -->
+  <g fill="#0f0a05">
+    <rect x="50" y="620" width="40" height="80"/>
+    <rect x="100" y="600" width="30" height="100"/>
+    <rect x="140" y="640" width="25" height="60"/>
+    
+    <rect x="1750" y="610" width="35" height="90"/>
+    <rect x="1800" y="590" width="45" height="110"/>
+    <rect x="1860" y="630" width="30" height="70"/>
+  </g>
+  
+  <!-- Building Windows (glowing) -->
+  <g fill="#fbbf24" filter="url(#glow)">
+    <rect x="58" y="630" width="4" height="4" opacity="0.8"/>
+    <rect x="70" y="650" width="4" height="4" opacity="0.6"/>
+    <rect x="58" y="670" width="4" height="4" opacity="0.7"/>
+    
+    <rect x="108" y="610" width="4" height="4" opacity="0.7"/>
+    <rect x="118" y="640" width="4" height="4" opacity="0.5"/>
+    <rect x="108" y="660" width="4" height="4" opacity="0.8"/>
+    
+    <rect x="1760" y="620" width="4" height="4" opacity="0.8"/>
+    <rect x="1772" y="650" width="4" height="4" opacity="0.6"/>
+    
+    <rect x="1815" y="600" width="5" height="5" opacity="0.7"/>
+    <rect x="1830" y="630" width="5" height="5" opacity="0.8"/>
+    <rect x="1815" y="660" width="5" height="5" opacity="0.5"/>
+  </g>
+  
+  <!-- Floating Hexagons (Data Symbols) -->
+  <g filter="url(#glow)" opacity="0.6">
+    <polygon points="300,300 320,288 340,300 340,324 320,336 300,324" fill="none" stroke="#fbbf24" stroke-width="1">
+      <animateTransform attributeName="transform" type="rotate" values="0 320 312;360 320 312" dur="20s" repeatCount="indefinite"/>
+    </polygon>
+    <polygon points="1600,250 1620,238 1640,250 1640,274 1620,286 1600,274" fill="none" stroke="#f59e0b" stroke-width="1">
+      <animateTransform attributeName="transform" type="rotate" values="360 1620 262;0 1620 262" dur="25s" repeatCount="indefinite"/>
+    </polygon>
+  </g>
+  
+  <!-- Database/Query Symbol in sky -->
+  <g transform="translate(960, 200)" filter="url(#softGlow)" opacity="0.4">
+    <ellipse cx="0" cy="0" rx="60" ry="15" fill="none" stroke="#fbbf24" stroke-width="1"/>
+    <ellipse cx="0" cy="20" rx="60" ry="15" fill="none" stroke="#fbbf24" stroke-width="1"/>
+    <ellipse cx="0" cy="40" rx="60" ry="15" fill="none" stroke="#fbbf24" stroke-width="1"/>
+    <line x1="-60" y1="0" x2="-60" y2="40" stroke="#fbbf24" stroke-width="1"/>
+    <line x1="60" y1="0" x2="60" y2="40" stroke="#fbbf24" stroke-width="1"/>
+  </g>
+  
+  <!-- Stars -->
+  <g fill="#fbbf24">
+    <circle cx="120" cy="50" r="1" opacity="0.8"/>
+    <circle cx="280" cy="80" r="0.8" opacity="0.6"/>
+    <circle cx="450" cy="30" r="1.2" opacity="0.7"/>
+    <circle cx="620" cy="70" r="0.8" opacity="0.5"/>
+    <circle cx="800" cy="40" r="1" opacity="0.9"/>
+    <circle cx="1100" cy="55" r="0.8" opacity="0.6"/>
+    <circle cx="1300" cy="35" r="1.2" opacity="0.8"/>
+    <circle cx="1500" cy="75" r="0.8" opacity="0.5"/>
+    <circle cx="1700" cy="45" r="1" opacity="0.7"/>
+    <circle cx="1850" cy="65" r="0.8" opacity="0.6"/>
+  </g>
+  
+  <!-- Vignette overlay -->
+  <rect width="100%" height="100%" fill="url(#bgGradient)" opacity="0.3"/>
+  
+  <!-- Edge darkening -->
+  <defs>
+    <radialGradient id="vignette" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" style="stop-color:#000000;stop-opacity:0" />
+      <stop offset="100%" style="stop-color:#000000;stop-opacity:0.7" />
+    </radialGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#vignette)"/>
+</svg>

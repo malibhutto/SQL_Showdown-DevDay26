@@ -1,0 +1,224 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <!-- Halftone dot pattern like the reference -->
+    <pattern id="dots" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="4" r="1.5" fill="#9333ea" opacity="0.3"/>
+    </pattern>
+    
+    <!-- Glitch noise pattern -->
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    
+    <!-- Glow filter -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Corridor gradient -->
+    <linearGradient id="corridorGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="50%" style="stop-color:#0f0f1a"/>
+      <stop offset="100%" style="stop-color:#0a0a12"/>
+    </linearGradient>
+    
+    <!-- Floor gradient -->
+    <linearGradient id="floorGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2a2a3e"/>
+      <stop offset="100%" style="stop-color:#0f0f1a"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Base background -->
+  <rect width="100%" height="100%" fill="#0a0a12"/>
+  
+  <!-- Halftone dot pattern overlay -->
+  <rect width="100%" height="100%" fill="url(#dots)"/>
+  
+  <!-- Data center corridor - ceiling -->
+  <polygon points="0,0 1920,0 1920,200 1400,350 520,350 0,200" fill="#12121e"/>
+  
+  <!-- Corridor walls - left -->
+  <polygon points="0,200 520,350 520,750 0,900" fill="#1a1a2e"/>
+  
+  <!-- Corridor walls - right -->
+  <polygon points="1920,200 1400,350 1400,750 1920,900" fill="#1a1a2e"/>
+  
+  <!-- Floor -->
+  <polygon points="0,900 520,750 1400,750 1920,900 1920,1080 0,1080" fill="url(#floorGrad)"/>
+  
+  <!-- Vanishing point glow -->
+  <ellipse cx="960" cy="550" rx="300" ry="200" fill="#fbbf24" opacity="0.1"/>
+  <ellipse cx="960" cy="550" rx="150" ry="100" fill="#fbbf24" opacity="0.15"/>
+  
+  <!-- Server rack lines - left wall -->
+  <g stroke="#3a3a5e" stroke-width="2">
+    <line x1="50" y1="250" x2="480" y2="380"/>
+    <line x1="50" y1="350" x2="490" y2="450"/>
+    <line x1="50" y1="450" x2="500" y2="520"/>
+    <line x1="50" y1="550" x2="505" y2="590"/>
+    <line x1="50" y1="650" x2="510" y2="660"/>
+    <line x1="50" y1="750" x2="515" y2="720"/>
+  </g>
+  
+  <!-- Server rack lines - right wall -->
+  <g stroke="#3a3a5e" stroke-width="2">
+    <line x1="1870" y1="250" x2="1440" y2="380"/>
+    <line x1="1870" y1="350" x2="1430" y2="450"/>
+    <line x1="1870" y1="450" x2="1420" y2="520"/>
+    <line x1="1870" y1="550" x2="1415" y2="590"/>
+    <line x1="1870" y1="650" x2="1410" y2="660"/>
+    <line x1="1870" y1="750" x2="1405" y2="720"/>
+  </g>
+  
+  <!-- Server lights - left (blinking effect simulated) -->
+  <g fill="#fbbf24" filter="url(#glow)">
+    <rect x="100" y="280" width="4" height="4" opacity="0.9"/>
+    <rect x="150" y="300" width="4" height="4" opacity="0.6"/>
+    <rect x="200" y="320" width="4" height="4" opacity="0.8"/>
+    <rect x="120" y="380" width="4" height="4" opacity="0.7"/>
+    <rect x="180" y="400" width="4" height="4" opacity="0.9"/>
+    <rect x="230" y="420" width="4" height="4" opacity="0.5"/>
+    <rect x="140" y="480" width="4" height="4" opacity="0.8"/>
+    <rect x="200" y="500" width="4" height="4" opacity="0.6"/>
+    <rect x="260" y="520" width="4" height="4" opacity="0.9"/>
+    <rect x="160" y="580" width="4" height="4" opacity="0.7"/>
+    <rect x="220" y="600" width="4" height="4" opacity="0.8"/>
+    <rect x="280" y="620" width="4" height="4" opacity="0.5"/>
+    <rect x="180" y="680" width="4" height="4" opacity="0.9"/>
+    <rect x="240" y="700" width="4" height="4" opacity="0.6"/>
+  </g>
+  
+  <!-- Server lights - right -->
+  <g fill="#fbbf24" filter="url(#glow)">
+    <rect x="1816" y="280" width="4" height="4" opacity="0.9"/>
+    <rect x="1766" y="300" width="4" height="4" opacity="0.6"/>
+    <rect x="1716" y="320" width="4" height="4" opacity="0.8"/>
+    <rect x="1796" y="380" width="4" height="4" opacity="0.7"/>
+    <rect x="1746" y="400" width="4" height="4" opacity="0.9"/>
+    <rect x="1696" y="420" width="4" height="4" opacity="0.5"/>
+    <rect x="1776" y="480" width="4" height="4" opacity="0.8"/>
+    <rect x="1726" y="500" width="4" height="4" opacity="0.6"/>
+    <rect x="1676" y="520" width="4" height="4" opacity="0.9"/>
+    <rect x="1756" y="580" width="4" height="4" opacity="0.7"/>
+    <rect x="1706" y="600" width="4" height="4" opacity="0.8"/>
+    <rect x="1656" y="620" width="4" height="4" opacity="0.5"/>
+    <rect x="1736" y="680" width="4" height="4" opacity="0.9"/>
+    <rect x="1686" y="700" width="4" height="4" opacity="0.6"/>
+  </g>
+  
+  <!-- Pixel debris / glitch squares - scattered -->
+  <g fill="#fbbf24" opacity="0.8">
+    <!-- Left side debris -->
+    <rect x="300" y="200" width="8" height="8"/>
+    <rect x="320" y="210" width="5" height="5"/>
+    <rect x="280" y="230" width="6" height="6"/>
+    <rect x="350" y="180" width="4" height="4"/>
+    <rect x="400" y="250" width="7" height="7"/>
+    <rect x="250" y="300" width="5" height="5"/>
+    <rect x="380" y="320" width="6" height="6"/>
+    <rect x="420" y="280" width="4" height="4"/>
+    <rect x="200" y="400" width="8" height="8"/>
+    <rect x="350" y="450" width="5" height="5"/>
+    
+    <!-- Right side debris -->
+    <rect x="1600" y="200" width="8" height="8"/>
+    <rect x="1580" y="220" width="5" height="5"/>
+    <rect x="1620" y="240" width="6" height="6"/>
+    <rect x="1550" y="180" width="4" height="4"/>
+    <rect x="1500" y="260" width="7" height="7"/>
+    <rect x="1650" y="300" width="5" height="5"/>
+    <rect x="1520" y="330" width="6" height="6"/>
+    <rect x="1480" y="290" width="4" height="4"/>
+    <rect x="1700" y="400" width="8" height="8"/>
+    <rect x="1550" y="460" width="5" height="5"/>
+    
+    <!-- Center debris -->
+    <rect x="800" y="300" width="6" height="6"/>
+    <rect x="850" y="280" width="4" height="4"/>
+    <rect x="1050" y="310" width="5" height="5"/>
+    <rect x="1100" y="290" width="7" height="7"/>
+    <rect x="900" y="400" width="4" height="4"/>
+    <rect x="1000" y="420" width="6" height="6"/>
+  </g>
+  
+  <!-- White/gray pixel debris for glitch effect -->
+  <g fill="#ffffff" opacity="0.6">
+    <rect x="310" y="195" width="3" height="3"/>
+    <rect x="330" y="225" width="4" height="4"/>
+    <rect x="1590" y="205" width="3" height="3"/>
+    <rect x="1610" y="235" width="4" height="4"/>
+    <rect x="700" y="350" width="3" height="3"/>
+    <rect x="1200" y="340" width="4" height="4"/>
+  </g>
+  
+  <!-- Dark pixel debris -->
+  <g fill="#0a0a12" opacity="0.9">
+    <rect x="340" y="205" width="10" height="10"/>
+    <rect x="290" y="250" width="8" height="8"/>
+    <rect x="1570" y="210" width="10" height="10"/>
+    <rect x="1630" y="255" width="8" height="8"/>
+    <rect x="750" y="320" width="12" height="12"/>
+    <rect x="1150" y="305" width="10" height="10"/>
+  </g>
+  
+  <!-- Floor grid lines -->
+  <g stroke="#3a3a5e" stroke-width="1" opacity="0.5">
+    <!-- Horizontal lines -->
+    <line x1="400" y1="780" x2="1520" y2="780"/>
+    <line x1="300" y1="830" x2="1620" y2="830"/>
+    <line x1="200" y1="880" x2="1720" y2="880"/>
+    <line x1="100" y1="930" x2="1820" y2="930"/>
+    <line x1="0" y1="980" x2="1920" y2="980"/>
+    <line x1="0" y1="1030" x2="1920" y2="1030"/>
+    
+    <!-- Perspective lines -->
+    <line x1="960" y1="550" x2="200" y2="1080"/>
+    <line x1="960" y1="550" x2="500" y2="1080"/>
+    <line x1="960" y1="550" x2="800" y2="1080"/>
+    <line x1="960" y1="550" x2="1120" y2="1080"/>
+    <line x1="960" y1="550" x2="1420" y2="1080"/>
+    <line x1="960" y1="550" x2="1720" y2="1080"/>
+  </g>
+  
+  <!-- Glitch lines / scan lines -->
+  <g stroke="#fbbf24" stroke-width="1" opacity="0.3">
+    <line x1="0" y1="150" x2="1920" y2="150"/>
+    <line x1="0" y1="450" x2="1920" y2="450"/>
+    <line x1="0" y1="650" x2="1920" y2="650"/>
+  </g>
+  
+  <!-- Purple accent lines like in reference -->
+  <g stroke="#9333ea" stroke-width="2" opacity="0.4">
+    <line x1="0" y1="100" x2="400" y2="100"/>
+    <line x1="1520" y1="100" x2="1920" y2="100"/>
+    <line x1="0" y1="980" x2="300" y2="980"/>
+    <line x1="1620" y1="980" x2="1920" y2="980"/>
+  </g>
+  
+  <!-- Corner brackets like the reference card style -->
+  <g stroke="#fbbf24" stroke-width="3" fill="none" opacity="0.6">
+    <!-- Top left -->
+    <path d="M 50,50 L 50,150 M 50,50 L 150,50"/>
+    <!-- Top right -->
+    <path d="M 1870,50 L 1870,150 M 1870,50 L 1770,50"/>
+    <!-- Bottom left -->
+    <path d="M 50,1030 L 50,930 M 50,1030 L 150,1030"/>
+    <!-- Bottom right -->
+    <path d="M 1870,1030 L 1870,930 M 1870,1030 L 1770,1030"/>
+  </g>
+  
+  <!-- Vignette -->
+  <defs>
+    <radialGradient id="vignette" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" style="stop-color:#000;stop-opacity:0"/>
+      <stop offset="100%" style="stop-color:#000;stop-opacity:0.7"/>
+    </radialGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#vignette)"/>
+</svg>

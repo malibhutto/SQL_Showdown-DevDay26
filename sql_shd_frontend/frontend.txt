@@ -1,0 +1,880 @@
+# Frontend Architecture — Query Quest / SQL Showdown
+
+> **Generated from full codebase analysis.** Every TypeScript, TSX, CSS, and configuration file was inspected to produce this document.
+
+---
+
+## 1. Project Overview
+
+**Query Quest** (branded as **"SQL Showdown"** for Developers Day 2026) is a **real-time SQL competition platform** built for university programming contests (originally for PROCOM/Developers Day events).
+
+### What the Frontend Does
+- Provides a **team login** portal for contestants to authenticate and enter the competition.
+- Displays a **competition lobby** showing countdown timers, competition status (upcoming / active / ended), and rules.
+- Delivers a **split-pane coding environment** with a Monaco SQL editor on one side and question details (description, database schema/tables, expected output) on the other.
+- Supports **running** SQL queries against a backend execution engine and **submitting** solutions for grading (Accepted / Wrong Answer / Runtime Error).
+- Includes a **full admin panel** with dashboard, team registration, team management, live leaderboard, contest configuration, and question management.
+
+### Target Users
+1. **Contestants** — University students competing in SQL challenges in teams.
+2. **Admin / Organizers** — Competition administrators who configure contests, register teams, manage questions, and monitor the live leaderboard.
+
+### Key Frontend Responsibilities
+- Authentication for both contestants (team login) and admins (admin key login).
+- Real-time competition timer management (countdown to start, remaining time).
+- In-browser SQL editing with Monaco Editor.
+- SQL execution and submission via backend API.
+- Result comparison (user output vs expected output) display.
+- Draft auto-save to `sessionStorage`.
+- Live leaderboard and statistics auto-refresh.
+
+---
+
+## 2. Tech Stack
+
+| Category | Technology | How It's Used |
+|---|---|---|
+| **Framework** | React 19.2 | The core UI framework. Uses functional components with hooks exclusively. |
+| **Language** | TypeScript ~5.9 | All source files are `.ts` / `.tsx`. Strict mode enabled in `tsconfig.app.json`. |
+| **Build System** | Vite (via `rolldown-vite@7.2.5`) | Used for dev server (`vite`), production build (`tsc -b && vite build`), and preview. The `vite` package is aliased to `rolldown-vite` via npm overrides. |
+| **Routing** | react-router-dom v7.11 | Declarative `<Routes>` / `<Route>` in `App.tsx`. Uses nested routes for admin dashboard with `<Outlet>`. |
+| **State Management** | React Context API | Three context providers: `AuthContext`, `AdminContext`, `CompetitionContext`. No external state library (no Redux/Zustand). |
+| **Code Editor** | @monaco-editor/react v4.7 | Embeds the Monaco Editor (VS Code's editor) for SQL editing with syntax highlighting, line numbers, and theme toggling. |
+| **Data Fetching** | Native `fetch` API | A custom `apiClient` wrapper in `services/api.ts` handles all HTTP requests. No Axios, React Query, or SWR. |
+| **Styling** | Vanilla CSS (co-located) | Each component/page has its own `.css` file. Global styles and CSS custom properties in `index.css`. No Tailwind, CSS Modules, or preprocessors. |
+| **Fonts** | Google Fonts | Orbitron (headings), Rajdhani (body), Share Tech Mono (code). Loaded via `<link>` in `index.html` and `@import` in `index.css`. |
+| **Production Server** | `serve` v14.2 | Used to serve the static `dist/` folder in production via `npm start` / `Procfile`. |
+| **Linting** | ESLint 9 + typescript-eslint | Configured in `eslint.config.js` with `react-hooks` and `react-refresh` plugins. |
+
+---
+
+## 3. Folder Structure
+
+```
+query_quest_frontend/
+├── index.html                  # HTML entry point, loads /src/main.tsx
+├── package.json                # Dependencies, scripts, engine requirements
+├── vite.config.ts              # Vite config (react plugin, dev server on 0.0.0.0:5173)
+├── tsconfig.json               # Root TS config (references tsconfig.app.json)
+├── tsconfig.app.json           # App-level TS config (strict, ES2022, react-jsx)
+├── eslint.config.js            # ESLint flat config
+├── .env.example                # Environment variable template (VITE_API_URL)
+├── Procfile                    # Heroku deployment: `web: npm start`
+├── public/                     # Static assets (query-quest.svg favicon)
+├── dist/                       # Production build output
+└── src/
+    ├── main.tsx                # React entry point (StrictMode + App)
+    ├── App.tsx                 # Root component: BrowserRouter + providers + all routes
+    ├── App.css                 # Legacy Vite template styles (mostly unused)
+    ├── index.css               # Global styles: CSS variables, scrollbars, fonts, animations
+    ├── assets/                 # Static assets (react.svg, unused)
+    ├── types/
+    │   └── index.ts            # All TypeScript interfaces/types + toFrontendQuestion helper
+    ├── data/
+    │   └── questions.ts        # Empty array (questions now fetched from API)
+    ├── contexts/
+    │   ├── AuthContext.tsx      # Team authentication state + useAuth hook
+    │   ├── AdminContext.tsx     # Admin authentication state + useAdmin hook
+    │   └── CompetitionContext.tsx # Competition state, questions, timer, progress + useCompetition hook
+    ├── services/
+    │   ├── api.ts              # Base HTTP client (apiClient + api.get/post/put/patch/delete)
+    │   ├── AuthService.ts      # Team login/logout/session management (class with static methods)
+    │   ├── AdminService.ts     # Admin API calls: teams, competition, leaderboard, questions (singleton instance)
+    │   └── CompetitionService.ts # Draft management, submission handling (class with static methods)
+    ├── components/
+    │   ├── index.ts            # Barrel export for all components
+    │   ├── ProtectedRoute.tsx  # Auth guard for contestant routes
+    │   ├── ProtectedAdminRoute.tsx # Auth guard for admin routes
+    │   ├── Modal.tsx           # Generic modal overlay
+    │   ├── SplitLayout.tsx     # Two-pane horizontal layout
+    │   ├── QuestionPanel.tsx   # Question display: description, tables, expected output
+    │   ├── EditorPanel.tsx     # Monaco SQL editor with draft persistence
+    │   ├── BottomBar.tsx       # Run/Submit buttons, status bar, cooldown timer, results panel
+    │   ├── ResultComparison.tsx # Side-by-side user vs. expected output tables
+    │   └── *.css               # Co-located styles for each component
+    └── pages/
+        ├── Login.tsx + Login.css           # Contestant team login page
+        ├── CompetitionLobby.tsx + .css     # Pre-competition lobby (countdown, rules, enter button)
+        ├── CompetitionPlay.tsx + .css      # Main competition IDE (split layout + bottom bar)
+        ├── AdminLogin.tsx + .css           # Admin key login page
+        ├── AdminDashboard.tsx + .css       # Admin shell with sidebar nav + <Outlet>
+        ├── AdminHome.tsx + .css            # Admin dashboard home (stats, quick actions, top teams)
+        ├── RegisterTeam.tsx + .css         # Register new team form
+        ├── AllTeams.tsx + .css             # List all teams with search/sort
+        ├── LiveLeaderboard.tsx + .css      # Live-updating leaderboard table
+        ├── ContestConfig.tsx + .css        # Competition create/update/reset/delete
+        ├── ManageQuestions.tsx + .css       # Add/view questions via JSON input
+        ├── NotFound.tsx + .css             # 404 page
+        ├── CompetitionLobby_old.css        # Legacy CSS (unused)
+        └── Login_old.css                   # Legacy CSS (unused)
+```
+
+### Naming Conventions
+- **Components**: PascalCase filenames matching the component name (e.g., `QuestionPanel.tsx` exports `QuestionPanel`).
+- **CSS files**: Named identically to their component (e.g., `QuestionPanel.css`).
+- **Services**: PascalCase with `Service` suffix (e.g., `AuthService.ts`).
+- **Contexts**: PascalCase with `Context` suffix (e.g., `AuthContext.tsx`).
+- **Pages**: PascalCase, each a self-contained page component with its own CSS.
+
+---
+
+## 4. Application Architecture
+
+### Provider Hierarchy
+
+```
+<StrictMode>
+  <BrowserRouter>
+    <AuthProvider>         ← Team session state
+      <CompetitionProvider> ← Competition state, questions, timer, progress
+        <AdminProvider>    ← Admin authentication state
+          <Routes>         ← All route definitions
+        </AdminProvider>
+      </CompetitionProvider>
+    </AuthProvider>
+  </BrowserRouter>
+</StrictMode>
+```
+
+> **Design Note**: All three providers wrap all routes, meaning both contestant and admin contexts are available everywhere. The `CompetitionProvider` depends on `AuthContext` (it uses `useAuth()` to get the session for fetching progress).
+
+### Component Hierarchy
+
+```
+App
+├── Login (page)
+├── ProtectedRoute → CompetitionLobby (page)
+├── ProtectedRoute → CompetitionPlay (page)
+│   ├── SplitLayout
+│   │   ├── EditorPanel (left) — Monaco editor
+│   │   └── QuestionPanel (right) — Question details + tables
+│   └── BottomBar — Run/Submit buttons + ResultComparison
+├── AdminLogin (page)
+└── ProtectedAdminRoute → AdminDashboard (layout shell)
+    ├── AdminHome (nested route: /admin/dashboard)
+    ├── RegisterTeam (nested route: /admin/register-team)
+    ├── AllTeams (nested route: /admin/teams)
+    ├── LiveLeaderboard (nested route: /admin/leaderboard)
+    ├── ContestConfig (nested route: /admin/contest)
+    └── ManageQuestions (nested route: /admin/questions)
+```
+
+### Data Flow
+
+```mermaid
+graph TD
+    A[Backend API] -->|fetch| B[services/api.ts]
+    B --> C[AuthService / AdminService / CompetitionService]
+    C --> D[Contexts: AuthContext / AdminContext / CompetitionContext]
+    D -->|useAuth / useAdmin / useCompetition| E[Page & Component via hooks]
+    E -->|User actions| C
+    F[sessionStorage] <-->|session, adminKey, drafts| C
+```
+
+1. **Services** handle all API communication and local storage (sessionStorage).
+2. **Contexts** consume services, hold state in React state, and expose it via custom hooks.
+3. **Components/Pages** consume context state via hooks and dispatch actions through context methods.
+4. **No prop drilling** — state flows through context providers.
+
+---
+
+## 5. Routing System
+
+### Library
+`react-router-dom` v7.11 using the `<BrowserRouter>` + `<Routes>` API.
+
+### Route Structure
+
+| Path | Component | Guard | Description |
+|---|---|---|---|
+| `/` | `Navigate → /login` | None | Root redirect |
+| `/login` | `Login` | None | Team login page |
+| `/competition` | `CompetitionLobby` | `ProtectedRoute` | Competition lobby with countdown |
+| `/competition/play` | `CompetitionPlay` | `ProtectedRoute` | Main competition IDE |
+| `/admin/login` | `AdminLogin` | None | Admin key login |
+| `/admin` | `AdminDashboard` (layout) | `ProtectedAdminRoute` | Admin layout shell (sidebar + `<Outlet>`) |
+| `/admin` (index) | `Navigate → /admin/dashboard` | (inherited) | Index redirect |
+| `/admin/dashboard` | `AdminHome` | (inherited) | Admin stats dashboard |
+| `/admin/register-team` | `RegisterTeam` | (inherited) | Team registration form |
+| `/admin/teams` | `AllTeams` | (inherited) | All teams list |
+| `/admin/leaderboard` | `LiveLeaderboard` | (inherited) | Live leaderboard |
+| `/admin/contest` | `ContestConfig` | (inherited) | Contest configuration |
+| `/admin/questions` | `ManageQuestions` | (inherited) | Question management |
+| `*` | `NotFound` | None | 404 page |
+
+### Protected Routes
+
+**`ProtectedRoute`** (for contestants):
+- Reads `isAuthenticated` and `loading` from `useAuth()`.
+- Shows "Loading..." while auth state initializes.
+- Redirects to `/login` if not authenticated.
+
+**`ProtectedAdminRoute`** (for admins):
+- Reads `isAuthenticated` and `isLoading` from `useAdmin()`.
+- Shows a spinner while verifying admin access.
+- Redirects to `/admin/login` if not authenticated.
+
+### Navigation Patterns
+- After successful team login → `navigate("/competition")`.
+- After successful admin login → `navigate("/admin/dashboard")`.
+- Logout (both contestant and admin) → `navigate("/login")` or `navigate("/admin/login")`.
+- Admin sidebar uses `<Link>` components for SPA navigation.
+- Competition lobby "Enter Competition" → `navigate("/competition/play")`.
+
+---
+
+## 6. State Management
+
+The project uses **React Context API** exclusively for global state. There are no external state management libraries.
+
+### Contexts
+
+#### `AuthContext`
+
+**File**: `src/contexts/AuthContext.tsx`
+
+| State | Type | Purpose |
+|---|---|---|
+| `session` | `Session \| null` | Current team session (teamName, token, loginTime) |
+| `loading` | `boolean` | Whether initial session check is complete |
+
+| Method | Description |
+|---|---|
+| `login(teamName, password)` | Calls `AuthService.login()`, stores session |
+| `logout()` | Calls `AuthService.logout()`, clears session |
+
+| Derived | Description |
+|---|---|
+| `isAuthenticated` | `!!session` |
+
+**Hook**: `useAuth()` — throws if used outside `AuthProvider`.
+
+#### `AdminContext`
+
+**File**: `src/contexts/AdminContext.tsx`
+
+| State | Type | Purpose |
+|---|---|---|
+| `isAuthenticated` | `boolean` | Whether admin is verified |
+| `isLoading` | `boolean` | Initial auth check in progress |
+| `statistics` | `any` | Dashboard statistics from backend |
+
+| Method | Description |
+|---|---|
+| `login(adminKey)` | Stores key via `AdminService`, verifies with backend |
+| `logout()` | Clears admin key and state |
+| `refreshStatistics()` | Re-fetches stats from `/admin/statistics` |
+
+**Hook**: `useAdmin()` — throws if used outside `AdminProvider`.
+
+#### `CompetitionContext`
+
+**File**: `src/contexts/CompetitionContext.tsx`
+
+This is the most complex context, managing competition lifecycle state:
+
+| State | Type | Purpose |
+|---|---|---|
+| `questions` | `Question[]` | Fetched from backend, converted to frontend format |
+| `currentQuestionIndex` | `number` | Currently selected question index |
+| `remainingTime` | `number` | Milliseconds remaining in competition |
+| `hasStarted` | `boolean` | Whether competition timer is running |
+| `hasEntered` | `boolean` | Whether team has entered the competition |
+| `solvedQuestions` | `string[]` | Array of solved question IDs |
+| `totalPoints` | `number` | Accumulated points |
+| `isLoading` | `boolean` | Question fetch in progress |
+| `competitionState` | `CompetitionState \| null` | Server-provided competition status |
+
+| Method | Description |
+|---|---|
+| `startCompetition()` | Calls `POST /competition/enter`, loads questions, initializes timer |
+| `markQuestionSolved(id, pts)` | Adds to solvedQuestions, increments totalPoints |
+| `setCurrentQuestionIndex(i)` | Switches displayed question |
+| `refetchQuestions()` | Re-fetches questions from backend |
+
+| Derived | Description |
+|---|---|
+| `currentQuestion` | `questions[currentQuestionIndex]` |
+| `isEnded` | `remainingTime === 0 && hasEntered` |
+
+**Important behaviors**:
+- On mount (if session exists), it loads progress from `/competition/progress` and competition config from `/competition/config`.
+- Runs a `setInterval` countdown timer that decrements `remainingTime` by 1000ms every second.
+- Questions are fetched from `GET /questions` and converted from `BackendQuestion` to `Question` format using `toFrontendQuestion()`.
+
+**Hook**: `useCompetition()` — throws if used outside `CompetitionProvider`.
+
+### Local State
+All page and component-level state uses `useState`. Key examples:
+- `BottomBar`: `isSubmitting`, `executionResult`, `showResults`, `cooldownUntil`, `nowTick`
+- `EditorPanel`: `content`, `theme`
+- `CompetitionLobby`: `competitionConfig`, `countdown`, `isLoading`, `isEntering`
+- `AdminDashboard`: `stats`, `isSidebarOpen`, `isVerifying`
+
+### When Global vs Local State Is Used
+- **Global (Context)**: Authentication state, competition state, questions, scores, timer — anything needed across multiple components or pages.
+- **Local (useState)**: UI state specific to a single component (form values, loading spinners, modal visibility, editor content).
+
+---
+
+## 7. API Communication
+
+### API Layer Architecture
+
+```
+services/api.ts         ← Base HTTP client (apiClient function + api convenience object)
+services/AuthService.ts ← Authentication-specific API calls
+services/AdminService.ts ← Admin panel API calls (own request method, parallel api client)
+services/CompetitionService.ts ← Submission and draft management
+```
+
+### Base Client: `api.ts`
+
+**Base URL**: `import.meta.env.VITE_API_URL || 'http://localhost:5001/api'`
+
+**`apiClient<T>(endpoint, options)`**:
+- Wraps native `fetch`.
+- Automatically sets `Content-Type: application/json`.
+- Reads JWT from `sessionStorage.getItem('session')` and attaches `Authorization: Bearer <token>`.
+- Returns `ApiResponse<T>` with `{ success, data?, error?, message? }`.
+- On non-2xx responses: returns `{ success: false, error: <parsed error message> }`.
+- On network errors: catches, logs, returns `{ success: false, error: <message> }`.
+
+**Convenience methods exported as `api`**:
+```typescript
+api.get<T>(endpoint, headers?)
+api.post<T>(endpoint, body, headers?)
+api.put<T>(endpoint, body, headers?)
+api.patch<T>(endpoint, body, headers?)
+api.delete<T>(endpoint, headers?)
+```
+
+### AdminService
+
+**Important**: `AdminService` does **NOT** use the shared `apiClient`. It has its own private `request<T>()` method that:
+- Attaches `x-admin-key` header from `sessionStorage.getItem('adminKey')`.
+- Also attaches `Authorization: Bearer <token>` if a session exists.
+- Throws the parsed response body directly on non-2xx responses (unlike `apiClient` which returns an error object).
+
+This is an **architectural inconsistency** — `AdminService` and `AuthService`/`CompetitionService` use different HTTP client patterns.
+
+`AdminService` is exported as a **singleton instance** (`export default new AdminService()`), unlike `AuthService` and `CompetitionService` which use **static methods**.
+
+### API Endpoints Used
+
+**Authentication**:
+- `POST /auth/login` — Team login (body: `{ teamName, password }`)
+- `POST /auth/register` — Register new team (body: `{ teamName, password }`)
+
+**Competition (contestant)**:
+- `GET /competition/config` — Get competition status, timing, countdown
+- `GET /competition/progress` — Get team's current progress (points, solved questions)
+- `POST /competition/enter` — Enter the competition, get remaining time and question count
+- `GET /questions` — Fetch all competition questions
+
+**Execution**:
+- `POST /run` — Run SQL query (body: `{ questionId, sql }`)
+- `POST /run/submit` — Submit SQL for grading (body: `{ questionId, sql }`)
+- `POST /submissions` — Legacy submission endpoint (used by `CompetitionService`)
+
+**Admin**:
+- `GET /admin/verify` — Verify admin key validity
+- `GET /admin/statistics` — Get dashboard statistics
+- `GET /admin/teams` — List all teams
+- `GET /admin/results?order=asc|desc` — Get leaderboard
+- `GET /admin/results/:teamName` — Get specific team results
+- `GET /admin/competition` — Get current competition config
+- `POST /admin/competition` — Create/update competition config
+- `DELETE /admin/competition` — Delete competition config
+- `POST /admin/competition/reset` — Reset all progress and submissions
+- `GET /admin/submissions?teamName=&questionId=&verdict=&limit=` — Query submissions
+- `POST /questions` — Create a new question
+
+### Error Handling
+- `apiClient` returns `{ success: false, error: "..." }` — callers check `response.success`.
+- `AdminService.request()` throws on errors — callers use try/catch.
+- Network errors are caught and displayed to users via status messages.
+- No centralized error boundary or interceptor pattern.
+
+### Caching / Retries
+- **No retry logic** exists in the API layer.
+- **No client-side caching** (no React Query, SWR, or custom cache).
+- Competition config is polled every 30 seconds in the lobby.
+- Admin stats are polled every 5–15 seconds.
+- Leaderboard and team lists are polled every 10 seconds.
+
+---
+
+## 8. Component System
+
+### Reusable Components (in `src/components/`)
+
+| Component | Props | Purpose |
+|---|---|---|
+| `Modal` | `title`, `children`, `onClose` | Generic overlay modal with backdrop click-to-close |
+| `SplitLayout` | `left`, `right` | Two-pane horizontal layout with a divider |
+| `ProtectedRoute` | `children` | Auth guard wrapper for contestant routes |
+| `ProtectedAdminRoute` | `children` | Auth guard wrapper for admin routes |
+
+### Smart (Stateful) Components
+
+| Component | Key State/Logic |
+|---|---|
+| `EditorPanel` | Monaco editor with draft save/load via `CompetitionService`, theme toggle |
+| `QuestionPanel` | Parses `setupSql` to extract CREATE TABLE / INSERT statements, renders data tables |
+| `BottomBar` | Handles Run/Submit with 5-second cooldown, keyboard shortcuts (Ctrl+Enter, Ctrl+Shift+Enter), result display |
+| `ResultComparison` | Renders side-by-side "Your Result" vs "Expected Result" tables with verdict badge |
+
+### Page Components
+
+All page components are **smart components** that directly consume contexts and services. There is no separation between container/presentational patterns at the page level.
+
+### Design Patterns
+
+- **Co-located CSS**: Each component has its own CSS file imported at the top.
+- **Barrel exports**: `components/index.ts` re-exports all components for clean imports.
+- **Props interface per component**: Every component defines its props as a TypeScript interface above the component.
+- **Named exports** for contestant-facing components; **default exports** for admin pages (inconsistency).
+- **No higher-order components** — protection is achieved by wrapping in `<ProtectedRoute>` / `<ProtectedAdminRoute>` in the route definitions.
+
+### Important Component Details
+
+#### `QuestionPanel`
+Contains a significant SQL parser (`parseSetupSql`) that uses regex to extract `CREATE TABLE` and `INSERT INTO` statements from `setupSql` strings, building table data structures for display. This parser handles:
+- Column name extraction (skipping PRIMARY KEY, FOREIGN KEY constraints)
+- Multi-row INSERT parsing with proper quoted string handling
+- Date/timestamp detection to avoid numeric parsing
+- Truncation to 8 rows with "... and N more rows" indicator
+
+#### `BottomBar`
+The most complex component, handling:
+- **Run** (`POST /run`): Executes SQL without grading
+- **Submit** (`POST /run/submit`): Executes and grades SQL
+- **Cooldown**: 5-second cooldown between actions, with visible countdown badge
+- **Keyboard shortcuts**: `Ctrl+Shift+Enter` = Run, `Ctrl+Enter` = Submit
+- **Result display**: Toggleable results panel with `ResultComparison`
+- **Solved question locking**: Prevents re-submission of solved questions
+- Gets draft content from `CompetitionService.getDraft()` (reads from sessionStorage, not component state)
+
+#### `EditorPanel`
+- Uses `@monaco-editor/react` `<Editor>` component with SQL language mode.
+- Auto-loads saved drafts from `CompetitionService.getDraft()` on question change.
+- Auto-saves to `CompetitionService.saveDraft()` on every keystroke.
+- Theme toggle between `vs-dark` and `light`.
+- Reset button restores to default starter: `"-- Write your SQL query here\n\n"`.
+
+---
+
+## 9. Custom Hooks
+
+The project has **three custom hooks**, all defined inside their respective context files (not in a separate `hooks/` directory):
+
+| Hook | Defined In | Returns | Used By |
+|---|---|---|---|
+| `useAuth()` | `contexts/AuthContext.tsx` | `{ session, login, logout, isAuthenticated, loading }` | `ProtectedRoute`, `Login`, `EditorPanel`, `BottomBar`, `CompetitionPlay`, `CompetitionLobby` |
+| `useAdmin()` | `contexts/AdminContext.tsx` | `{ isAuthenticated, isLoading, login, logout, statistics, refreshStatistics }` | `ProtectedAdminRoute`, `AdminLogin` |
+| `useCompetition()` | `contexts/CompetitionContext.tsx` | `{ currentQuestionIndex, setCurrentQuestionIndex, remainingTime, isEnded, startCompetition, hasStarted, hasEntered, solvedQuestions, totalPoints, markQuestionSolved, questions, isLoading, currentQuestion, refetchQuestions, competitionState }` | `CompetitionPlay`, `CompetitionLobby`, `BottomBar` |
+
+All hooks follow the standard pattern: call `useContext()`, throw an error if the context is `undefined` (meaning the hook was used outside its provider).
+
+---
+
+## 10. Styling System
+
+### Approach
+**Vanilla CSS** with **CSS Custom Properties** (variables) for theming. No CSS-in-JS, Tailwind, CSS Modules, or preprocessors.
+
+### Global Theme (`index.css`)
+
+```css
+:root {
+  --primary-purple: #9333ea;
+  --primary-pink: #ec4899;
+  --primary-cyan: #06b6d4;
+  --dark-bg: #0a0a0f;
+  --darker-bg: #050508;
+  --card-bg: rgba(20, 20, 35, 0.95);
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1aa;
+  --accent-yellow: #fbbf24;
+  --danger-red: #ef4444;
+  --success-green: #22c55e;
+  --glow-purple: rgba(147, 51, 234, 0.5);
+  --glow-cyan: rgba(6, 182, 212, 0.5);
+}
+```
+
+### Visual Theme
+- **Cyberpunk / Sci-Fi aesthetic**: Dark backgrounds, neon glows, gradient scrollbars, animated particles.
+- **Typography**: Orbitron (futuristic headings), Rajdhani (readable body), Share Tech Mono (code).
+- **Custom scrollbars**: Purple-to-cyan gradient with glow hover effects.
+- **Focus rings**: Cyan outline on `:focus-visible`.
+
+### Per-Component Styles
+Each component imports its own CSS file (`import './ComponentName.css'`). These files use:
+- Standard CSS class selectors (no BEM or other methodology).
+- CSS animations (`@keyframes`) for particles, rain, scanlines, glows.
+- Media queries for responsive behavior (primarily in lobby/login pages).
+- Extensive CSS animations on login pages (floating keywords, digital rain, glowing orbs, particles).
+
+### Admin Panel Styling
+The admin panel uses a **contrasting warm palette** (golds, browns `#b8860b`, cream backgrounds `#faf8f3`, warm accents) that is distinctly different from the cyberpunk contestant interface. This creates a visual separation between the two user roles.
+
+---
+
+## 11. Forms Handling
+
+### Libraries Used
+**None** — all forms use native HTML `<form>` elements with React controlled inputs (`useState` + `onChange`).
+
+### Validation
+- **Client-side validation**: Manual checks in submit handlers (e.g., `teamName.length < 2`, `password.length < 4`).
+- **HTML validation attributes**: `required`, `minLength`, `type` attributes on inputs.
+- **No schema validation library** (no Zod, Yup, or similar).
+
+### Form Patterns
+```typescript
+const [field, setField] = useState("");
+const handleSubmit = async (e: FormEvent) => {
+  e.preventDefault();
+  // manual validation
+  // API call
+  // handle success/error
+};
+```
+
+### Forms in the Application
+| Page | Form Purpose | Fields |
+|---|---|---|
+| `Login` | Team authentication | teamName, password |
+| `AdminLogin` | Admin authentication | adminKey |
+| `RegisterTeam` | Register new team | teamName, password, confirmPassword |
+| `ContestConfig` | Create/update competition | competitionName, startTime, duration, maxTeams, isActive |
+| `ManageQuestions` | Add question via JSON | JSON textarea |
+
+---
+
+## 12. Authentication Flow
+
+### Contestant (Team) Authentication
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant L as Login Page
+    participant AC as AuthContext
+    participant AS as AuthService
+    participant API as Backend API
+    participant SS as sessionStorage
+
+    U->>L: Enter team name + password
+    L->>AC: login(teamName, password)
+    AC->>AS: AuthService.login(teamName, password)
+    AS->>AS: Client-side validation
+    AS->>API: POST /auth/login { teamName, password }
+    API-->>AS: { success, token, user }
+    AS->>SS: Store session { teamName, token, loginTime }
+    AS-->>AC: { success: true, session }
+    AC->>AC: setSession(session)
+    AC-->>L: { success: true }
+    L->>L: navigate("/competition")
+```
+
+**Session persistence**:
+- Stored in `sessionStorage` (cleared on browser close — deliberate for shared PCs).
+- On mount, `AuthProvider` calls `AuthService.getSession()` to restore session from `sessionStorage`.
+- No token refresh logic. No JWT expiry check.
+
+**Mock mode**: `AuthService` has a `USE_MOCK_AUTH` flag (currently `false`) that short-circuits to validate against hardcoded team names.
+
+### Admin Authentication
+
+```mermaid
+sequenceDiagram
+    participant U as Admin
+    participant AL as AdminLogin Page
+    participant AC as AdminContext
+    participant AS as AdminService
+    participant API as Backend API
+    participant SS as sessionStorage
+
+    U->>AL: Enter admin key
+    AL->>AC: login(adminKey)
+    AC->>AS: AdminService.setAdminKey(key)
+    AS->>SS: Store adminKey
+    AC->>AS: AdminService.verifyAdminAccess()
+    AS->>API: GET /admin/verify (x-admin-key header)
+    API-->>AS: 200 OK or 401/403
+    AS-->>AC: true/false
+    AC->>AC: setIsAuthenticated(true)
+    AC-->>AL: true
+    AL->>AL: navigate("/admin/dashboard")
+```
+
+**Admin key handling**:
+- Stored in `sessionStorage` as `adminKey`.
+- Sent via `x-admin-key` custom header on every admin API request.
+- On mount, `AdminContext` checks for existing key and re-verifies with backend.
+
+### Token Handling
+- **Contestant**: JWT Bearer token in `Authorization` header (auto-attached by `apiClient`).
+- **Admin**: `x-admin-key` custom header (attached by `AdminService.request()`) **plus** Bearer token if available.
+
+### Protected Routes
+- `ProtectedRoute`: Checks `useAuth().isAuthenticated`. Redirects to `/login` if false.
+- `ProtectedAdminRoute`: Checks `useAdmin().isAuthenticated`. Redirects to `/admin/login` if false.
+- Both show loading indicators during initial auth verification.
+
+---
+
+## 13. Error Handling
+
+### API Errors
+- **`apiClient`**: Catches all fetch errors, returns `{ success: false, error: message }`. Callers check `response.success`.
+- **`AdminService`**: Throws on HTTP errors. Callers use try/catch.
+- Error messages are displayed inline in forms or in status bars.
+
+### UI Error Display Patterns
+- **Forms**: Error messages shown in red `<div className="error-message">`.
+- **Competition Play**: Status bar shows error messages (e.g., "Error: Failed to connect to server"), auto-clears after 3-4 seconds via `setTimeout`.
+- **Admin pages**: Success/error messages shown in colored banners.
+
+### No Error Boundary
+There is **no React Error Boundary** component in the application. Uncaught rendering errors will crash the UI.
+
+### No Global Error Logging
+Console.error is used throughout. No external error tracking service (Sentry, etc.) is integrated.
+
+---
+
+## 14. Performance Strategies
+
+### Draft Auto-Save
+- Editor content is saved to `sessionStorage` on every keystroke via `CompetitionService.saveDraft()`. This is lightweight but could cause performance issues with very frequent re-renders.
+
+### Cooldown Timer
+- `BottomBar` implements a 5-second cooldown between Run/Submit actions to prevent API spam. Uses `setInterval` at 500ms for countdown display.
+
+### Animation Reduction
+- Login and lobby pages use CSS animations (particles, digital rain, floating keywords). Comments in the code indicate these were intentionally reduced "for performance."
+
+### No Lazy Loading
+- All routes are **eagerly loaded** — no `React.lazy()` or `Suspense` for code splitting. The entire application loads as a single bundle.
+
+### No Memoization
+- No usage of `React.memo()`, `useMemo()`, or `useCallback()` in most components (except `useCallback` in `BottomBar` for `handleRun`/`handleSubmit` and in `CompetitionContext` for `fetchQuestions`).
+
+### Auto-Refresh Intervals
+- Admin dashboard stats: every 5 seconds
+- Admin home stats: every 15 seconds
+- Leaderboard and teams: every 10 seconds
+- Competition lobby config: every 30 seconds
+- These intervals are **not cancelled when the tab is hidden**, which wastes resources.
+
+---
+
+## 15. Environment Configuration
+
+### Environment Variables
+
+| Variable | Default | Description |
+|---|---|---|
+| `VITE_API_URL` | `http://localhost:5001/api` | Backend API base URL |
+
+**Usage**: Accessed via `import.meta.env.VITE_API_URL` (Vite's env variable pattern).
+
+### Config Files
+
+| File | Purpose |
+|---|---|
+| `.env.example` | Template showing available env vars |
+| `vite.config.ts` | Vite dev server config (host: `0.0.0.0`, port: `5173`, `cssMinify: false`) |
+| `tsconfig.json` | Root TypeScript config (references `tsconfig.app.json`) |
+| `tsconfig.app.json` | App TS config: `strict`, `ES2022`, `react-jsx`, `verbatimModuleSyntax` |
+| `eslint.config.js` | ESLint flat config with React hooks & refresh plugins |
+
+### Runtime Config
+- `API_BASE_URL` is determined at build time via Vite env injection.
+- `USE_MOCK_AUTH` and `USE_MOCK_API` are hardcoded boolean flags in service files (currently both `false`).
+
+---
+
+## 16. Build and Deployment
+
+### Scripts (from `package.json`)
+
+| Script | Command | Purpose |
+|---|---|---|
+| `dev` | `vite` | Start dev server on `0.0.0.0:5173` |
+| `build` | `tsc -b && vite build` | Type-check then build production bundle |
+| `lint` | `eslint .` | Run ESLint |
+| `preview` | `vite preview` | Preview production build locally |
+| `start` | `serve -s dist` | Serve static production build |
+
+### Deployment
+- **Procfile**: `web: npm start` — indicates **Heroku** deployment.
+- Production build served by `serve` package as a static SPA.
+- The `-s` flag enables SPA fallback (all routes serve `index.html`).
+- **Engine requirements**: Node 20.x, npm 10.x.
+
+### Build Notes
+- `cssMinify: false` in `vite.config.ts` — CSS is not minified in production builds.
+- Vite is aliased to `rolldown-vite@7.2.5` via npm overrides (experimental Rolldown-based Vite).
+
+---
+
+## 17. Key Workflows
+
+### Team Login → Competition Entry → Solving Questions
+
+1. Team opens `/login`, enters team name + password.
+2. `AuthService.login()` → `POST /auth/login` → JWT token stored in `sessionStorage`.
+3. Redirected to `/competition` (CompetitionLobby).
+4. Lobby fetches `GET /competition/config` to show competition status.
+5. If competition is "active", team clicks "Enter Competition".
+6. `CompetitionContext.startCompetition()` → `POST /competition/enter` → receives remaining time, solved questions, total points.
+7. Questions fetched via `GET /questions`, converted from `BackendQuestion` to `Question` format.
+8. Redirected to `/competition/play` (CompetitionPlay).
+9. Team sees question on right, Monaco editor on left.
+10. Types SQL → auto-saved to `sessionStorage` as draft.
+11. Clicks "Run" → `POST /run` → sees results in `ResultComparison` panel.
+12. Clicks "Submit" → `POST /run/submit` → verdict displayed (Accepted/Wrong Answer/Runtime Error).
+13. If Accepted, question marked as solved, points added to total.
+14. 5-second cooldown between Run/Submit actions.
+15. Timer counts down; when it hits 0, `isEnded = true`, editor becomes read-only.
+
+### Admin Workflow
+
+1. Admin navigates to `/admin/login`, enters admin key.
+2. `AdminContext.login()` → stores key → `GET /admin/verify` to validate.
+3. Redirected to `/admin/dashboard` (AdminDashboard).
+4. Sidebar navigation between: Dashboard, Register Team, All Teams, Leaderboard, Contest Config, Manage Questions.
+5. Contest Config: Create/update competition with name, start time, duration, max teams.
+6. Register Team: Create team with name + password via `POST /auth/register`.
+7. Manage Questions: Paste JSON question format, validate, create via `POST /questions`.
+8. Live Leaderboard: Auto-refreshes every 10 seconds with rank, points, solved count.
+
+### Data Fetching Lifecycle
+
+```
+Component mounts
+  → useEffect triggers
+    → Service method called
+      → api.get/post (fetch wrapper)
+        → Backend responds
+          → State updated (setState)
+            → Component re-renders
+```
+
+All data fetching is imperative (in `useEffect` or event handlers). No declarative data fetching layer.
+
+---
+
+## 18. Important Files
+
+| File | Responsibility |
+|---|---|
+| `index.html` | HTML entry point. Loads Google Fonts, sets meta tags, mounts React at `#root`. |
+| `src/main.tsx` | React entry point. Renders `<App>` in `StrictMode`. |
+| `src/App.tsx` | **Root component**. Defines entire provider hierarchy and all routes. This is the single source of truth for the application's structure. |
+| `src/index.css` | **Global design system**. CSS custom properties (colors, fonts), scrollbar styling, base element styles, utility animations. |
+| `src/types/index.ts` | **Type definitions**. All shared TypeScript interfaces (`Question`, `Session`, `Submission`, `CompetitionState`, `ExpectedOutput`). Also contains `toFrontendQuestion()` converter. |
+| `src/services/api.ts` | **API client**. Base URL config, `apiClient` function, auth token injection, error normalization. |
+| `src/contexts/CompetitionContext.tsx` | **Competition state engine**. The most complex file — manages questions, timer, progress, solved state, and server sync. |
+| `src/components/BottomBar.tsx` | **Execution engine UI**. Handles Run/Submit with cooldown, keyboard shortcuts, result display. |
+| `src/components/QuestionPanel.tsx` | **SQL parser**. Contains regex-based SQL parser that extracts table structures from `setupSql` for display. |
+| `vite.config.ts` | Dev server and build configuration. |
+| `package.json` | Dependency list, scripts, engine requirements. |
+
+---
+
+## 19. Conventions and Patterns
+
+### Component Patterns
+- **Functional components only** — no class components.
+- **Hooks-based state** — `useState`, `useEffect`, `useCallback`, `useContext`.
+- **Co-located CSS** — each component/page has its own `.css` file.
+- **Props interfaces** — defined immediately above the component.
+
+### Export Patterns
+- Contestant-facing components use **named exports**: `export function Login() {}`.
+- Admin pages use **default exports**: `export default AdminLogin`.
+- Components barrel-exported via `components/index.ts`.
+
+### Code Organization
+- **One component per file** (occasionally with helper functions/interfaces).
+- **No shared utility functions** — helpers are embedded in components (e.g., `formatTime`, `parseSetupSql`).
+- **No custom hooks directory** — hooks are in context files.
+
+### TypeScript Conventions
+- Interfaces preferred over types.
+- `type` imports used (`import type { ... }`).
+- `any` used in several admin components for flexibility.
+- Strict mode enabled but not all strictness warnings resolved.
+
+### Service Layer Patterns
+- `AuthService` and `CompetitionService`: Static methods on a class (never instantiated).
+- `AdminService`: Instance methods on a class, exported as a singleton.
+- Both patterns coexist (inconsistency).
+
+---
+
+## 20. Things Future Developers Should Know
+
+### Architectural Inconsistencies
+
+1. **Two HTTP clients**: `api.ts` (`apiClient`) is used by `AuthService`, `CompetitionService`, and `CompetitionContext`. `AdminService` has its own `request()` method that duplicates similar logic but with different error handling (throws vs returns error objects).
+
+2. **Export style mismatch**: Contestant components use named exports; admin pages use default exports. This is visible in `App.tsx` where admin imports don't use destructuring.
+
+3. **Service class patterns**: `AuthService` and `CompetitionService` use static methods (never instantiated). `AdminService` is a class instance (singleton). Both patterns coexist without clear rationale.
+
+### Technical Debt
+
+1. **No code splitting**: All routes are eagerly loaded. For a competition app this may be acceptable, but the admin panel could be lazy-loaded.
+
+2. **No error boundaries**: Any uncaught rendering error crashes the entire app.
+
+3. **`any` types**: Several admin components use `any` for statistics and team data instead of proper types.
+
+4. **Legacy files**: `Login_old.css` and `CompetitionLobby_old.css` exist but are not imported anywhere.
+
+5. **`data/questions.ts`**: Contains an empty array with a comment "Questions are now fetched from backend API." This file is unused but still exists.
+
+6. **`CompetitionService` deprecations**: Several methods (`startCompetition`, `getCompetitionState`) are marked as deprecated with console warnings but not removed.
+
+7. **Console.log statements**: `CompetitionContext` and `QuestionPanel` contain numerous `console.log` debugging statements that should be removed for production.
+
+8. **`App.css`**: Contains legacy Vite template styles (logo spin animation, `.card`, `.read-the-docs`) that are not used by the application.
+
+### Fragile Areas
+
+1. **`QuestionPanel.parseSetupSql()`**: Uses regex to parse SQL. This will break on:
+   - Nested parentheses in column definitions
+   - Multi-line string values
+   - SQL dialects with non-standard CREATE TABLE syntax
+   - Comments in SQL
+
+2. **Timer synchronization**: The competition timer uses client-side `setInterval` that drifts from server time. The lobby refreshes config every 30 seconds, but the play page relies entirely on a local countdown initialized from the server response. Long-running tabs may drift significantly.
+
+3. **Draft reads in `BottomBar`**: When Run/Submit is clicked, `BottomBar` reads the draft from `sessionStorage` via `CompetitionService.getDraft()`, NOT from `EditorPanel`'s component state. This creates a coupling where drafts must be saved to sessionStorage before the Run/Submit action reads them. This works because `EditorPanel.handleEditorChange` saves on every keystroke, but it's a fragile indirection.
+
+4. **`AdminService` constructor**: Reads `adminKey` from `sessionStorage` in the constructor. Since it's a singleton instantiated at module load time, this happens before the React app mounts. If `sessionStorage` is not available (SSR), it would fail silently.
+
+### Hidden Coupling
+
+- `BottomBar` depends on `CompetitionService.getDraft()` to read the current editor content, not on EditorPanel's state. These components never directly communicate — they're coupled through `sessionStorage`.
+
+- `CompetitionContext` depends on `AuthContext` (via `useAuth()` hook). The provider hierarchy **must** be `AuthProvider > CompetitionProvider`.
+
+- Admin verification happens in both `AdminContext` (on mount) and `AdminDashboard` (in its own `verifyAccess` call). This is redundant.
+
+### Assumptions
+
+- **Shared PCs**: `sessionStorage` is used deliberately (not `localStorage`) because teams share lab computers. Session data clears when the browser closes, ensuring the next team starts clean.
+
+- **Single SQL dialect**: The editor is hardcoded to `sql` language mode. The `EditorLanguage` type only allows `'sql'`. Backend questions have a `dialect` field (sqlite/mysql/postgresql) but the frontend always sends SQL and ignores the dialect.
+
+- **No offline support**: The application requires a constant connection to the backend. There is no service worker, offline cache, or queue mechanism.
+
+- **Competition is centrally timed**: All teams in a competition share the same start/end time. There is no per-team timer (unlike some competitive platforms).

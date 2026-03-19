@@ -1,0 +1,56 @@
+/* ========================================
+   SQL SHOWDOWN - RESULT COMPARISON (CYBER)
+   Output Verification Interface
+   ======================================== */
+
+.result-comparison {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.glow-text-warning {
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.8), 0 0 20px rgba(245, 158, 11, 0.4);
+}
+
+.glow-text-danger {
+  text-shadow: 0 0 10px rgba(255, 107, 107, 0.8), 0 0 20px rgba(255, 107, 107, 0.4);
+}
+
+.text-shadow-glow {
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.8), 0 0 20px rgba(0, 255, 136, 0.4);
+}
+
+/* Specific styling for the verdict states */
+.verdict-accepted .terminal-table-container {
+  border-color: var(--success);
+  box-shadow: inset 0 0 15px rgba(0, 255, 136, 0.05);
+}
+.verdict-accepted th {
+  color: var(--success);
+  background: rgba(0, 255, 136, 0.1);
+}
+
+.verdict-wrong .terminal-table-container {
+  border-color: var(--warning);
+  box-shadow: inset 0 0 15px rgba(245, 158, 11, 0.05);
+}
+.verdict-wrong th {
+  color: var(--warning);
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.verdict-error .terminal-table-container {
+  border-color: var(--danger);
+  box-shadow: inset 0 0 15px rgba(255, 107, 107, 0.05);
+}
+.verdict-error th {
+  color: var(--danger);
+  background: rgba(255, 107, 107, 0.1);
+}
+
+/* Ensure table cells don't overflow */
+.tactical-table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

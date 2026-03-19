@@ -1,0 +1,144 @@
+/* ========================================
+   SQL SHOWDOWN - ADMIN DASHBOARD (CYBER)
+   Command Center Layout
+   ======================================== */
+
+.admin-dashboard {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: #050b14; /* Darker amber-tinted background */
+  color: var(--text-primary);
+}
+
+.admin-loading-screen {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #050b14;
+}
+
+/* Sidebar */
+.admin-sidebar {
+  width: 280px;
+  background: rgba(10, 15, 25, 0.95);
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 50;
+  backdrop-filter: blur(10px);
+}
+
+.sidebar-hidden {
+  transform: translateX(-100%);
+  position: absolute;
+}
+
+/* Navigation Links */
+.admin-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+  background: transparent;
+}
+
+.admin-nav-item:hover {
+  background: rgba(250, 204, 21, 0.05); /* Warning color with low opacity */
+  color: var(--warning);
+  border-left-color: rgba(250, 204, 21, 0.5);
+}
+
+.admin-nav-item.active {
+  background: rgba(250, 204, 21, 0.1);
+  color: var(--warning);
+  border-left-color: var(--warning);
+  box-shadow: inset 20px 0 20px -20px rgba(250, 204, 21, 0.3);
+  text-shadow: 0 0 10px rgba(250, 204, 21, 0.5);
+}
+
+.admin-nav-item svg {
+  transition: all 0.2s ease;
+}
+
+.admin-nav-item.active svg {
+  filter: drop-shadow(0 0 5px var(--warning));
+}
+
+/* Logout button */
+.admin-logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px;
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  color: var(--danger);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+.admin-logout-btn:hover {
+  background: rgba(255, 107, 107, 0.2);
+  box-shadow: 0 0 15px rgba(255, 107, 107, 0.3);
+  text-shadow: 0 0 5px var(--danger);
+}
+
+/* Main Content Area */
+.admin-main-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 40px;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: transparent;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .admin-sidebar {
+    position: fixed;
+    height: 100%;
+    left: 0;
+    top: 0;
+  }
+  
+  .admin-main-content {
+    padding: 24px;
+    margin-left: 0 !important;
+  }
+}
+
+/* Hamburger menu specifically for leaderboard hiding */
+.admin-hamburger {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 60;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(250, 204, 21, 0.3);
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

@@ -1,0 +1,85 @@
+/* ========================================
+   SQL SHOWDOWN - EDITOR PANEL (CYBER)
+   IDE Interface
+   ======================================== */
+
+.editor-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: rgba(7, 20, 42, 0.9);
+  border: 1px solid rgba(124, 157, 255, 0.2);
+  position: relative;
+}
+
+.editor-toolbar {
+  height: 40px;
+  background: rgba(0, 0, 0, 0.6);
+  border-bottom: 1px solid rgba(124, 157, 255, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  flex-shrink: 0;
+}
+
+.toolbar-left,
+.toolbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.toolbar-button {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.toolbar-button:hover:not(:disabled) {
+  color: var(--accent-primary);
+  background: rgba(124, 157, 255, 0.1);
+}
+
+.toolbar-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.language-badge {
+  padding: 2px 8px;
+  font-size: 0.6rem;
+}
+
+.editor-wrapper {
+  flex: 1;
+  position: relative;
+  border: 1px solid rgba(124, 157, 255, 0.1);
+  box-shadow: inset 0 0 15px rgba(124, 157, 255, 0.05);
+  margin: 8px;
+  background: #1e1e1e;
+  /* Monaco base */
+}
+
+/* Custom left border highlight for the active Monaco line */
+/* .editor-wrapper .current-line {
+  border-left: 3px solid var(--accent-primary) !important;
+} */
+
+.editor-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}

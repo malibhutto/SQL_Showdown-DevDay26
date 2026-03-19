@@ -1,0 +1,23 @@
+/* ========================================
+   SQL SHOWDOWN - ADMIN HOME (CYBER)
+   Dashboard Overview Style Fixes
+   ======================================== */
+
+.admin-home-page {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Base utility overrides specifically tailored for the dark mode Admin cards */
+.admin-home-page .glass-panel {
+  background: rgba(10, 15, 25, 0.85); /* Slightly darker panels to offset the command center */
+}
+
+.glow-text-warning {
+  text-shadow: 0 0 10px rgba(250, 204, 21, 0.6), 0 0 20px rgba(250, 204, 21, 0.3);
+}
+
+.animate-fade-slide-up {
+  animation: fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

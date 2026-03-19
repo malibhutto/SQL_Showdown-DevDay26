@@ -1,0 +1,30 @@
+/* ========================================
+   SQL SHOWDOWN - MODAL (CYBER)
+   Overlay Dialog Box
+   ======================================== */
+
+/* Note: Core styles are mostly utility tailwind classes in TSX for this component */
+
+.modal-overlay {
+  /* Utility handled in TSX component directly for z-index, blurring and positioning */
+}
+
+.modal-content {
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(124, 157, 255, 0.05);
+}
+
+.modal-header h2 {
+  text-shadow: 0 0 10px rgba(124, 157, 255, 0.4);
+}
+
+.modal-body {
+  background: var(--bg-panel);
+}
+
+.modal-content.corner-bracket::before {
+  top: -2px; left: -2px;
+}
+
+.modal-content.corner-bracket::after {
+  bottom: -2px; right: -2px;
+}

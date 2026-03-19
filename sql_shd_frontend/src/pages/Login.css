@@ -1,0 +1,226 @@
+/* ========================================
+   SQL SHOWDOWN - CYBER-WARFARE LOGIN
+   Split Card Mission Briefing
+   ======================================== */
+
+.login-container {
+  min-height: 100vh;
+  min-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  z-index: 10;
+  background:
+    linear-gradient(rgba(4, 10, 20, 0.72), rgba(4, 10, 20, 0.82)),
+    url('/dist/bg2.jpg') center center / cover no-repeat;
+}
+
+.login-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 75%, rgba(124, 157, 255, 0.22), transparent 30%),
+    radial-gradient(circle at 78% 22%, rgba(124, 157, 255, 0.14), transparent 24%),
+    linear-gradient(180deg, rgba(8, 13, 24, 0.08), rgba(8, 13, 24, 0.5));
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Split Card Base */
+.login-card-split {
+  display: flex;
+  width: 100%;
+  max-width: 900px;
+  min-height: 500px;
+  position: relative;
+  z-index: 20;
+  overflow: hidden;
+  animation: fadeSlideUp 0.5s ease-out;
+}
+
+/* ===== LEFT PANEL (Mission Briefing) ===== */
+.mission-briefing {
+  width: 45%;
+  background: rgba(124, 157, 255, 0.04);
+  border-right: 1px solid rgba(124, 157, 255, 0.15);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.classification-banner {
+  margin-bottom: 30px;
+}
+
+.classification-banner .glitch-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7rem;
+  color: var(--danger);
+  letter-spacing: 0.15em;
+  text-shadow: 0 0 10px rgba(255, 107, 107, 0.8);
+  animation: blink 2s step-end infinite;
+}
+
+.mission-details {
+  margin-bottom: 24px;
+}
+
+.mission-details h2 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px dotted rgba(124, 157, 255, 0.2);
+  padding-bottom: 4px;
+}
+
+.mission-details h2 span {
+  color: var(--text-primary);
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 1px;
+}
+
+.status-live {
+  color: var(--danger) !important;
+  text-shadow: 0 0 8px rgba(255, 107, 107, 0.6);
+  animation: blink 1.5s step-end infinite;
+}
+
+.briefing-text {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: auto;
+}
+
+.system-status-indicators {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(124, 157, 255, 0.15);
+}
+
+.corner-bracket-inner {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  bottom: 16px;
+  left: 16px;
+  pointer-events: none;
+}
+
+.corner-bracket-inner::before {
+  content: '┌';
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: rgba(124, 157, 255, 0.4);
+  font-family: monospace;
+}
+
+.corner-bracket-inner::after {
+  content: '┘';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  color: rgba(124, 157, 255, 0.4);
+  font-family: monospace;
+}
+
+/* ===== RIGHT PANEL (Form) ===== */
+.login-form-side {
+  width: 55%;
+  padding: 50px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-header {
+  margin-bottom: 32px;
+}
+
+.login-header h1 {
+  font-size: 2.2rem;
+  margin-bottom: 6px;
+}
+
+.subheading {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--accent-primary);
+  opacity: 0.7;
+}
+
+.input-with-icon .tactical-input {
+  padding-left: 44px;
+}
+
+.login-btn {
+  height: 50px;
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .login-card-split {
+    flex-direction: column;
+  }
+
+  .mission-briefing {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid rgba(124, 157, 255, 0.15);
+    padding: 30px;
+  }
+
+  .login-form-side {
+    width: 100%;
+    padding: 30px;
+  }
+}

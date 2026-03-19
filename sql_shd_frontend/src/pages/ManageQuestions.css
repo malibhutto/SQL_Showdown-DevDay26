@@ -1,0 +1,12 @@
+/* ========================================
+   SQL SHOWDOWN - MANAGE QUESTIONS (CYBER)
+   Objective Arsenal Styles
+   ======================================== */
+
+/* CSS Overrides, layout handled by Tailwind utility classes in TSX */
+
+.manage-questions-page .json-input {
+  white-space: pre;
+  overflow-wrap: normal;
+  overflow-x: auto;
+}

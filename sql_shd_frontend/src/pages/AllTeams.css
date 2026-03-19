@@ -1,0 +1,17 @@
+/* ========================================
+   SQL SHOWDOWN - ALL TEAMS (CYBER)
+   Agent Roster Data Grid
+   ======================================== */
+
+/* CSS Overrides, main layout handled by Tailwind utility classes in TSX */
+
+.all-teams-page .tactical-btn {
+  background: rgba(250, 204, 21, 0.1);
+  padding: 8px 16px;
+  height: auto;
+}
+
+.all-teams-page select option {
+  background: var(--bg-panel);
+  color: var(--text-primary);
+}

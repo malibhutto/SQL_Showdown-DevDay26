@@ -1,0 +1,22 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.claude/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Node artifacts
+**/node_modules/
+**/dist/
+**/coverage/
+**/*.log
+
+# Temporary files
+*.tmp
+*.temp
+

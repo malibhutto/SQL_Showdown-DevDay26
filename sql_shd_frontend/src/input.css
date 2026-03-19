@@ -1,0 +1,538 @@
+/* ========================================
+   SQL SHOWDOWN - CYBER-WARFARE REDESIGN
+   Global Design System
+   ======================================== */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    box-sizing: border-box;
+}
+
+/* ========================================
+   CSS CUSTOM PROPERTIES
+   ======================================== */
+:root {
+    --bg-base: #0B0E13;
+    --bg-panel: #161A22;
+    --bg-panel-alt: #1C212B;
+    --accent-primary: #7C9DFF;
+    --accent-secondary: #38BDF8;
+    --warning: #FACC15;
+    --danger: #FF6B6B;
+    --text-primary: #e6f1ff;
+    --text-secondary: #7fa6c6;
+    --grid-line: rgba(124, 157, 255, 0.08);
+    --glow: rgba(124, 157, 255, 0.35);
+    --glow-strong: rgba(124, 157, 255, 0.6);
+    --gold: #ffd700;
+    --silver: #c0c0c0;
+    --bronze: #cd7f32;
+}
+
+/* ========================================
+   BASE STYLES & GLOBAL BACKGROUND
+   ======================================== */
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+}
+
+/* Layered background system */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: -1;
+    background-image:
+        /* 3. Scanline effect */
+        repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.02) 1px, transparent 1px, transparent 3px),
+        /* 2. Tactical grid */
+        repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(124, 157, 255, 0.05) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(124, 157, 255, 0.05) 40px),
+        /* 1. Tactical overlay */
+        linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.90));
+}
+
+#root {
+    width: 100%;
+    height: 100%;
+}
+
+/* ========================================
+   TYPOGRAPHY
+   ======================================== */
+body {
+    font-family: 'Rajdhani', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.display-font {
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin: 0;
+}
+
+code,
+pre,
+.mono-font {
+    font-family: 'JetBrains Mono', 'Share Tech Mono', monospace;
+}
+
+/* Selection */
+::selection {
+    background: var(--accent-primary);
+    color: var(--bg-base);
+}
+
+/* ========================================
+   SCROLLBAR
+   ======================================== */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #161A22;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(124, 157, 255, 0.4);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(124, 157, 255, 0.7);
+}
+
+::-webkit-scrollbar-corner {
+    background: var(--bg-base);
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(124, 157, 255, 0.4) #161A22;
+}
+
+/* Focus states */
+*:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+}
+
+/* ========================================
+   GLOBAL KEYFRAME ANIMATIONS
+   ======================================== */
+@keyframes pulseGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 15px var(--glow), inset 0 0 8px rgba(124, 157, 255, 0.1);
+    }
+
+    50% {
+        box-shadow: 0 0 30px var(--glow-strong), inset 0 0 15px rgba(124, 157, 255, 0.2);
+    }
+}
+
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scanSweep {
+    0% {
+        transform: translateY(-100%);
+    }
+
+    100% {
+        transform: translateY(100vh);
+    }
+}
+
+@keyframes radarSweep {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+@keyframes drift {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(-100vh);
+    }
+}
+
+/* Upward drift variation for elements like datastream */
+@keyframes dataDrift {
+    0% {
+        transform: translateY(100%) scale(1);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.8;
+    }
+
+    90% {
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translateY(-100vh) scale(0.9);
+        opacity: 0;
+    }
+}
+
+@keyframes borderPulse {
+
+    0%,
+    100% {
+        border-color: rgba(124, 157, 255, 0.3);
+    }
+
+    50% {
+        border-color: rgba(124, 157, 255, 0.8);
+    }
+}
+
+@keyframes glitchHack {
+
+    0%,
+    100% {
+        transform: translate(0, 0);
+        clip-path: inset(0 0 0 0);
+    }
+
+    10% {
+        transform: translate(-3px, 1px);
+        clip-path: inset(20% 0 60% 0);
+        text-shadow: 3px 0 var(--danger), -3px 0 var(--accent-primary);
+    }
+
+    20% {
+        transform: translate(2px, -2px);
+        clip-path: inset(0 0 0 0);
+        text-shadow: 3px 0 var(--danger), -3px 0 var(--accent-primary);
+    }
+
+    30% {
+        transform: translate(-1px, -1px);
+        text-shadow: 0 0 10px var(--accent-primary);
+    }
+}
+
+/* ========================================
+   GLOBAL UTILITY CLASSES
+   ======================================== */
+
+.glass-panel {
+    background: rgba(7, 20, 42, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(124, 157, 255, 0.2);
+    box-shadow: 0 0 20px rgba(124, 157, 255, 0.08), inset 0 0 20px rgba(124, 157, 255, 0.03);
+}
+
+.neon-text {
+    color: #7C9DFF;
+    text-shadow: 0 0 10px rgba(124, 157, 255, 0.8), 0 0 30px rgba(124, 157, 255, 0.4);
+}
+
+.neon-border {
+    border: 1px solid rgba(124, 157, 255, 0.4);
+    box-shadow: 0 0 12px rgba(124, 157, 255, 0.3), inset 0 0 8px rgba(124, 157, 255, 0.05);
+}
+
+.tactical-btn {
+    background: linear-gradient(90deg, #7C9DFF, #38BDF8);
+    color: #0B0E13;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    box-shadow: 0 0 15px rgba(124, 157, 255, 0.6), inset 0 0 8px rgba(255, 255, 255, 0.1);
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.tactical-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 0 25px rgba(124, 157, 255, 0.85);
+}
+
+.tactical-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.tactical-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(80%);
+    box-shadow: none;
+}
+
+.tactical-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.tactical-btn:hover::before {
+    left: 100%;
+}
+
+/* Corner Bracket Decoration */
+.corner-bracket {
+    position: relative;
+}
+
+.corner-bracket::before,
+.corner-bracket::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.corner-bracket::before {
+    top: -1px;
+    left: -1px;
+    border-top: 2px solid var(--accent-primary);
+    border-left: 2px solid var(--accent-primary);
+}
+
+.corner-bracket::after {
+    bottom: -1px;
+    right: -1px;
+    border-bottom: 2px solid var(--accent-primary);
+    border-right: 2px solid var(--accent-primary);
+}
+
+/* LED Indicator */
+.led-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.led-indicator::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-primary);
+    box-shadow: 0 0 6px var(--accent-primary);
+    flex-shrink: 0;
+}
+
+.led-indicator.offline::before {
+    background: rgba(127, 166, 198, 0.4);
+    box-shadow: none;
+}
+
+.led-indicator.warning::before {
+    background: var(--warning);
+    box-shadow: 0 0 6px var(--warning);
+}
+
+.led-indicator.danger::before {
+    background: var(--danger);
+    box-shadow: 0 0 6px var(--danger);
+    animation: blink 1s step-end infinite;
+}
+
+/* HUD Separator */
+.hud-separator {
+    height: 1px;
+    width: 100%;
+    background: linear-gradient(90deg, transparent, rgba(124, 157, 255, 0.5), transparent);
+    margin: 12px 0;
+}
+
+.hud-separator-vertical {
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, rgba(124, 157, 255, 0.5), transparent);
+    margin: 0 12px;
+}
+
+/* Difficulty/State Badges */
+.badge-difficulty {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 1px solid currentColor;
+}
+
+.badge-difficulty.easy {
+    color: var(--accent-primary);
+    background: rgba(124, 157, 255, 0.08);
+    box-shadow: 0 0 10px rgba(124, 157, 255, 0.2);
+}
+
+.badge-difficulty.medium {
+    color: var(--warning);
+    background: rgba(250, 204, 21, 0.08);
+    box-shadow: 0 0 10px rgba(250, 204, 21, 0.2);
+}
+
+.badge-difficulty.hard {
+    color: var(--danger);
+    background: rgba(255, 107, 107, 0.08);
+    box-shadow: 0 0 10px rgba(255, 107, 107, 0.2);
+}
+
+/* Data Stream floating text layer */
+.data-stream-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.data-stream {
+    position: absolute;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: rgba(124, 157, 255, 0.15);
+    animation: dataDrift 20s linear infinite;
+    text-shadow: 0 0 4px rgba(124, 157, 255, 0.2);
+    white-space: pre;
+}
+
+/* Helpful animation classes */
+.animate-fade-up {
+    animation: fadeSlideUp 0.4s ease forwards;
+}
+
+.animate-pulse-glow {
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* Tactical inputs */
+.tactical-input {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(124, 157, 255, 0.3);
+    border-radius: 4px;
+    box-shadow: inset 0 0 8px rgba(124, 157, 255, 0.15);
+    color: var(--text-primary);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.tactical-input::placeholder {
+    color: rgba(127, 166, 198, 0.4);
+}
+
+.tactical-input:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 12px rgba(124, 157, 255, 0.4), inset 0 0 8px rgba(124, 157, 255, 0.2);
+}
+
+/* Alert boxes */
+.tactical-alert {
+    padding: 12px 16px;
+    background: rgba(255, 107, 107, 0.1);
+    border-left: 3px solid var(--danger);
+    border-radius: 0 4px 4px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    color: var(--danger);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.95rem;
+    text-shadow: 0 0 8px rgba(255, 107, 107, 0.3);
+}
+
+/* Action links */
+a {
+    color: var(--accent-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--accent-primary);
+    text-shadow: 0 0 8px var(--glow);
+}

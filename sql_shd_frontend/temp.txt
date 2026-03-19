@@ -1,0 +1,178 @@
+index.css
+
+/* ========================================
+   SQL SHOWDOWN - DEVELOPERS DAY 2026
+   Terminal/IDE Hybrid Theme
+   ======================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+* {
+  box-sizing: border-box;
+  font-family: "Share Tech Mono", monospace !important;
+}
+
+:root {
+  --bg-primary: #0F1115;
+  --bg-surface: #171B22;
+  --accent: #6B8CFF;
+  --danger: #FF6B6B;
+  --success: #4ADE80;
+  --text-primary: #E5E7EB;
+  --text-secondary: #9CA3AF;
+  --border-color: #242A33;
+  --accent-dim: #6B8CFF33;
+  --accent-glow: #6B8CFF22;
+  --danger-dim: #FF6B6B33;
+  --success-dim: #4ADE8033;
+  --bg-elevated: #1C2028;
+  --bg-inset: #0B0D10;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+code {
+  font-family: "Share Tech Mono", monospace !important;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+/* Global scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Global utility classes */
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--border-color);
+  border-top: 2px solid var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Loading states */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 300px;
+  gap: 16px;
+  color: var(--text-secondary);
+}
+
+/* Selection styling */
+::selection {
+  background: var(--primary-purple);
+  color: white;
+}
+
+/* Scrollbar styling - Cyberpunk Theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(10, 10, 15, 0.8);
+  border-left: 1px solid rgba(147, 51, 234, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--primary-purple), var(--primary-cyan));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--primary-pink), var(--primary-purple));
+  box-shadow: 0 0 10px var(--glow-purple);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--dark-bg);
+}
+
+/* Dark scrollbar for editor sections */
+.editor-panel ::-webkit-scrollbar-track,
+.play-container ::-webkit-scrollbar-track {
+  background: #0a0a0f;
+}
+
+.editor-panel ::-webkit-scrollbar-thumb,
+.play-container ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #374151, #1f2937);
+}
+
+.editor-panel ::-webkit-scrollbar-thumb:hover,
+.play-container ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #4b5563, #374151);
+}
+
+/* Focus ring styling */
+*:focus-visible {
+  outline: 2px solid var(--primary-cyan);
+  outline-offset: 2px;
+}
+
+/* Link styling */
+a {
+  color: var(--primary-cyan);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+a:hover {
+  color: var(--primary-pink);
+  text-shadow: 0 0 10px var(--glow-cyan);
+}
+
+/* Spinner animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
