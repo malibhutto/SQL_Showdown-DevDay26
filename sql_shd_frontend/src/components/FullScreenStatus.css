@@ -1,0 +1,42 @@
+.fullscreen-status {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.fullscreen-status__card {
+    width: min(560px, 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 32px;
+    text-align: center;
+}
+
+.fullscreen-status__title {
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    letter-spacing: 0.12em;
+    margin: 0;
+}
+
+.fullscreen-status__subtitle {
+    margin: 0;
+    color: var(--text-secondary);
+    font-family: "JetBrains Mono", monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.fullscreen-status__spinner {
+    width: 52px;
+    height: 52px;
+    border-radius: 999px;
+    border: 3px solid rgba(124, 157, 255, 0.2);
+    border-top-color: var(--accent-primary);
+    box-shadow: 0 0 16px rgba(124, 157, 255, 0.25);
+    animation: radarSweep 1s linear infinite;
+}

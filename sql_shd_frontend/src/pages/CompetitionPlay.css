@@ -42,6 +42,35 @@
   animation: glitchHack 4s infinite, pulseGlow 3s ease-in-out infinite alternate;
 }
 
+.loading-logo-title {
+  font-size: clamp(2rem, 6vw, 4rem);
+}
+
+.loading-step {
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.loading-step.delay-1 {
+  animation-delay: 0.2s;
+}
+
+.loading-step.delay-2 {
+  animation-delay: 0.8s;
+}
+
+.loading-step.delay-3 {
+  animation-delay: 1.4s;
+}
+
+.loading-step-indicator {
+  display: inline-flex;
+}
+
+.loading-progress-bar {
+  animation: progressFill 2s ease-out forwards;
+}
+
 .glow-text-danger {
   text-shadow: 0 0 10px rgba(255, 107, 107, 0.8), 0 0 30px rgba(255, 107, 107, 0.4);
 }
@@ -111,6 +140,33 @@
   z-index: 40;
 }
 
+.loading-state-card {
+  padding: 40px;
+  margin: auto;
+  width: min(480px, 100% - 24px);
+}
+
+.retry-button {
+  width: 100%;
+  min-height: 44px;
+  padding: 12px 24px;
+}
+
+.hud-divider-left {
+  left: 33.33%;
+}
+
+.hud-divider-right {
+  left: 66.66%;
+}
+
+.split-layout-wrapper {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
 /* Scrollbar tweaks for tabs */
 .question-selector-tabs::-webkit-scrollbar {
   height: 2px;
@@ -127,5 +183,28 @@
 
   .hud-team-badge span {
     display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .play-hud-bar {
+    height: auto;
+    min-height: 56px;
+    padding: 8px 10px;
+    gap: 8px;
+  }
+
+  .hud-center {
+    position: static;
+    transform: none;
+  }
+
+  .hud-right {
+    gap: 10px;
+  }
+
+  .question-selector-tabs button {
+    padding: 10px 14px;
+    font-size: 0.65rem;
   }
 }

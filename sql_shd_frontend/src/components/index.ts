@@ -6,3 +6,4 @@ export { BottomBar } from './BottomBar';
 export { ProtectedRoute } from './ProtectedRoute';
 export { ProtectedAdminRoute } from './ProtectedAdminRoute';
 export { ResultComparison } from './ResultComparison';
+export { FullScreenStatus } from './FullScreenStatus';

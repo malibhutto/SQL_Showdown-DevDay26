@@ -51,28 +51,20 @@ export function CompetitionProvider({ children }: { children: ReactNode }) {
   const [totalPoints, setTotalPoints] = useState(0);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [competitionState] = useState<CompetitionState | null>(null);
+  const competitionState: CompetitionState | null = null;
 
   // Fetch questions from backend
   const fetchQuestions = useCallback(async () => {
     setIsLoading(true);
     try {
-      console.log("Fetching questions from /api/questions...");
       const response = await api.get<{
         success: boolean;
         questions: BackendQuestion[];
       }>("/questions");
 
-      console.log("Raw API response:", response);
-      console.log("Response data:", response.data);
-
       if (response.success && response.data) {
         const backendQuestions = response.data.questions || [];
-        console.log("Backend questions count:", backendQuestions.length);
-        console.log("First question:", backendQuestions[0]);
         const frontendQuestions = backendQuestions.map(convertQuestion);
-        console.log("Converted questions count:", frontendQuestions.length);
-        console.log("First converted question:", frontendQuestions[0]);
         setQuestions(frontendQuestions);
       } else {
         console.error("Response not successful or no data:", response);
@@ -133,7 +125,7 @@ export function CompetitionProvider({ children }: { children: ReactNode }) {
         }
       } catch (error: any) {
         // User hasn't entered competition yet, that's okay
-        console.log("No existing progress found (user may not have entered)");
+        // No-op: user may not have entered competition yet.
       }
     };
 
@@ -205,13 +197,6 @@ export function CompetitionProvider({ children }: { children: ReactNode }) {
 
   const isEnded = remainingTime === 0 && hasEntered;
   const currentQuestion = questions[currentQuestionIndex] || null;
-
-  console.log("CompetitionContext state:", {
-    questionsCount: questions.length,
-    currentQuestionIndex,
-    hasCurrentQuestion: !!currentQuestion,
-    currentQuestionId: currentQuestion?.id,
-  });
 
   return (
     <CompetitionContext.Provider

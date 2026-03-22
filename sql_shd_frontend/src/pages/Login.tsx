@@ -4,6 +4,15 @@ import { useAuth } from "../contexts/AuthContext";
 import { ShieldAlert, Users, KeyRound, Zap } from "lucide-react";
 import "./Login.css";
 
+const loginDataStreams = [
+  { text: "01010101", className: "stream-pos-1" },
+  { text: "SELECT * FROM users", className: "stream-pos-2" },
+  { text: "LEFT JOIN", className: "stream-pos-3" },
+  { text: "WHERE auth = TRUE", className: "stream-pos-4" },
+  { text: "11001010", className: "stream-pos-5" },
+  { text: "CREATE INDEX", className: "stream-pos-6" },
+];
+
 export function Login() {
   const [teamName, setTeamName] = useState("");
   const [password, setPassword] = useState("");
@@ -30,58 +39,22 @@ export function Login() {
   return (
     <div className="login-container">
       <div className="data-stream-layer">
-        <span
-          className="data-stream"
-          style={{ left: "10%", animationDelay: "0s" }}
-        >
-          01010101
-        </span>
-        <span
-          className="data-stream"
-          style={{ left: "25%", animationDelay: "4s" }}
-        >
-          SELECT * FROM users
-        </span>
-        <span
-          className="data-stream"
-          style={{ left: "40%", animationDelay: "2s" }}
-        >
-          LEFT JOIN
-        </span>
-        <span
-          className="data-stream"
-          style={{ left: "60%", animationDelay: "8s" }}
-        >
-          WHERE auth = TRUE
-        </span>
-        <span
-          className="data-stream"
-          style={{ left: "75%", animationDelay: "5s" }}
-        >
-          11001010
-        </span>
-        <span
-          className="data-stream"
-          style={{ left: "90%", animationDelay: "1s" }}
-        >
-          CREATE INDEX
-        </span>
+        {loginDataStreams.map((stream) => (
+          <span
+            key={stream.text}
+            className={`data-stream ${stream.className}`}
+            aria-hidden="true"
+          >
+            {stream.text}
+          </span>
+        ))}
       </div>
 
       <div className="login-card-split glass-panel corner-bracket">
         <div className="mission-briefing">
           <div className="classification-banner">
-            <span
-              className="glitch-text"
-              style={{
-                fontFamily: "Orbitron",
-                fontSize: "0.7rem",
-                color: "var(--danger)",
-                letterSpacing: "0.15em",
-                textShadow: "0 0 10px rgba(255, 107, 107, 0.8)",
-              }}
-            >
-              ⬛ CLASSIFIED // OPERATION FILE
+            <span className="glitch-text classification-text">
+              CLASSIFIED // OPERATION FILE
             </span>
           </div>
 
@@ -129,10 +102,11 @@ export function Login() {
 
           <form onSubmit={handleSubmit} className="login-form">
             <div className="form-group">
-              <label>AGENT DESIGNATION</label>
+              <label htmlFor="team-name">AGENT DESIGNATION</label>
               <div className="input-with-icon">
                 <Users className="input-icon" size={18} />
                 <input
+                  id="team-name"
                   type="text"
                   value={teamName}
                   onChange={(e) => setTeamName(e.target.value)}
@@ -146,10 +120,11 @@ export function Login() {
             </div>
 
             <div className="form-group">
-              <label>ACCESS CODE</label>
+              <label htmlFor="team-password">ACCESS CODE</label>
               <div className="input-with-icon">
                 <KeyRound className="input-icon" size={18} />
                 <input
+                  id="team-password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -163,11 +138,10 @@ export function Login() {
             </div>
 
             {error && (
-              <div className="tactical-alert">
+              <div className="tactical-alert" role="alert" aria-live="polite">
                 <ShieldAlert
                   size={18}
-                  className="alert-icon"
-                  style={{ flexShrink: 0 }}
+                  className="alert-icon alert-icon-fixed"
                 />
                 <span>{error}</span>
               </div>

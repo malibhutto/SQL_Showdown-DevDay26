@@ -36,7 +36,6 @@ export function CompetitionPlay() {
   // Fetch questions when component mounts or when competition starts
   useEffect(() => {
     if (questions.length === 0 && !isLoading) {
-      console.log("No questions loaded, fetching...");
       refetchQuestions();
     }
   }, [questions.length, isLoading, refetchQuestions]);
@@ -67,67 +66,31 @@ export function CompetitionPlay() {
     return (
       <div className="play-container">
         <div className="loading-fullscreen">
-          <h1
-            className="neon-text loading-logo text-center mb-12"
-            style={{ fontSize: "4rem" }}
-          >
+          <h1 className="neon-text loading-logo loading-logo-title text-center mb-12">
             SQL SHOWDOWN
           </h1>
           <div className="loading-steps flex flex-col gap-4 mb-12 w-full max-w-md mx-auto">
-            <div
-              className="flex items-center gap-3 animate-fade-up"
-              style={{
-                animationDelay: "0.2s",
-                opacity: 0,
-                animationFillMode: "forwards",
-              }}
-            >
-              <div
-                className="led-indicator"
-                style={{ display: "inline-block" }}
-              ></div>
+            <div className="flex items-center gap-3 animate-fade-up loading-step delay-1">
+              <div className="led-indicator loading-step-indicator"></div>
               <span className="text-secondary font-mono tracking-widest text-sm">
                 INITIALIZING DATAVERSE LINK...
               </span>
             </div>
-            <div
-              className="flex items-center gap-3 animate-fade-up"
-              style={{
-                animationDelay: "0.8s",
-                opacity: 0,
-                animationFillMode: "forwards",
-              }}
-            >
-              <div
-                className="led-indicator"
-                style={{ display: "inline-block" }}
-              ></div>
+            <div className="flex items-center gap-3 animate-fade-up loading-step delay-2">
+              <div className="led-indicator loading-step-indicator"></div>
               <span className="text-secondary font-mono tracking-widest text-sm">
                 AUTHENTICATING AGENT CREDENTIALS...
               </span>
             </div>
-            <div
-              className="flex items-center gap-3 animate-fade-up"
-              style={{
-                animationDelay: "1.4s",
-                opacity: 0,
-                animationFillMode: "forwards",
-              }}
-            >
-              <div
-                className="led-indicator"
-                style={{ display: "inline-block" }}
-              ></div>
+            <div className="flex items-center gap-3 animate-fade-up loading-step delay-3">
+              <div className="led-indicator loading-step-indicator"></div>
               <span className="text-secondary font-mono tracking-widest text-sm">
                 SYNCING MISSION DATABASE...
               </span>
             </div>
           </div>
           <div className="loading-progress-container w-full max-w-md mx-auto h-1 bg-black/50 border border-primary/20 rounded overflow-hidden">
-            <div
-              className="loading-progress-bar h-full bg-primary"
-              style={{ animation: "progressFill 2s ease-out forwards" }}
-            ></div>
+            <div className="loading-progress-bar h-full bg-primary"></div>
           </div>
         </div>
       </div>
@@ -137,17 +100,14 @@ export function CompetitionPlay() {
   if (!currentQuestion || questions.length === 0) {
     return (
       <div className="play-container">
-        <div
-          className="loading-state glass-panel corner-bracket"
-          style={{ padding: "40px", margin: "auto" }}
-        >
+        <div className="loading-state glass-panel corner-bracket loading-state-card">
           <p className="font-mono text-secondary mb-4 text-center">
             NO MISSION OBJECTIVES DETECTED IN DATAVERSE.
           </p>
           <button
             onClick={() => refetchQuestions()}
-            className="tactical-btn"
-            style={{ padding: "12px 24px", cursor: "pointer", width: "100%" }}
+            className="tactical-btn retry-button"
+            aria-label="Retry loading objectives"
           >
             RE-ESTABLISH UPLINK
           </button>
@@ -188,10 +148,7 @@ export function CompetitionPlay() {
           </div>
         </div>
 
-        <div
-          className="hud-separator-vertical hidden md:block absolute"
-          style={{ left: "33.33%" }}
-        ></div>
+        <div className="hud-separator-vertical hidden md:block absolute hud-divider-left"></div>
 
         <div className="hud-center flex flex-col items-center">
           <span className="text-[10px] text-secondary font-orbitron tracking-[0.2em] mb-1">
@@ -204,10 +161,7 @@ export function CompetitionPlay() {
           </span>
         </div>
 
-        <div
-          className="hud-separator-vertical hidden md:block absolute"
-          style={{ left: "66.66%" }}
-        ></div>
+        <div className="hud-separator-vertical hidden md:block absolute hud-divider-right"></div>
 
         <div className="hud-right flex gap-6 items-center">
           <div className="hud-points flex items-center gap-2">
@@ -274,17 +228,15 @@ export function CompetitionPlay() {
             <button
               key={q.id}
               onClick={() => setCurrentQuestionIndex(idx)}
+              aria-label={`Open objective ${idx + 1}`}
               className={`px-6 py-3 font-orbitron text-xs tracking-widest flex items-center gap-2 border-b-2 transition-colors
                 ${
                   isActived
                     ? "border-primary bg-primary/10 text-primary"
                     : isSolved
-                      ? "border-neon-green/50 text-neon-green"
+                      ? "border-primary/40 text-primary"
                       : "border-transparent text-secondary hover:bg-white/5"
                 }`}
-              style={{
-                color: isSolved && !isActived ? "var(--accent-primary)" : "",
-              }}
             >
               {isSolved && !isActived && <span className="text-[10px]">✓</span>}
               Q.{String(idx + 1).padStart(2, "0")}
@@ -293,10 +245,7 @@ export function CompetitionPlay() {
         })}
       </div>
 
-      <div
-        className="split-layout-wrapper"
-        style={{ display: "flex", flex: 1, minHeight: 0, overflow: "hidden" }}
-      >
+      <div className="split-layout-wrapper">
         <SplitLayout
           left={
             <QuestionPanel

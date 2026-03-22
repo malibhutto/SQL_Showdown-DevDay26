@@ -18,6 +18,48 @@
     url('/dist/bg2.jpg') center center / cover no-repeat;
 }
 
+.classification-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7rem;
+  color: var(--danger);
+  letter-spacing: 0.15em;
+  text-shadow: 0 0 10px rgba(255, 107, 107, 0.8);
+}
+
+.alert-icon-fixed {
+  flex-shrink: 0;
+}
+
+.stream-pos-1 {
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.stream-pos-2 {
+  left: 25%;
+  animation-delay: 4s;
+}
+
+.stream-pos-3 {
+  left: 40%;
+  animation-delay: 2s;
+}
+
+.stream-pos-4 {
+  left: 60%;
+  animation-delay: 8s;
+}
+
+.stream-pos-5 {
+  left: 75%;
+  animation-delay: 5s;
+}
+
+.stream-pos-6 {
+  left: 90%;
+  animation-delay: 1s;
+}
+
 .login-container::before {
   content: '';
   position: absolute;

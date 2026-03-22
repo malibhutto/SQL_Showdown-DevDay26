@@ -30,19 +30,28 @@
   --text-primary: #E6E8EC;
   --text-secondary: #A1A8B3;
   --text-muted: #6B7280;
-  
+
   --grid-line: rgba(124, 157, 255, 0.08);
   --glow: rgba(124, 157, 255, 0.35);
   --glow-strong: rgba(124, 157, 255, 0.6);
   --gold: #FACC15;
   --silver: #A1A8B3;
   --bronze: #F97316;
+
+  /* Spacing scale (8px grid) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
 }
 
 /* ========================================
    BASE STYLES & GLOBAL BACKGROUND
    ======================================== */
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -63,14 +72,14 @@ body::before {
   bottom: 0;
   pointer-events: none;
   z-index: -1;
-  background-image: 
+  background-image:
     /* 3. Scanline effect */
-    repeating-linear-gradient(to bottom, rgba(255,255,255,0.02), rgba(255,255,255,0.02) 1px, transparent 1px, transparent 3px),
+    repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.02) 1px, transparent 1px, transparent 3px),
     /* 2. Tactical grid */
-    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(124, 157, 255,0.05) 40px),
-    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(124, 157, 255,0.05) 40px),
+    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(124, 157, 255, 0.05) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(124, 157, 255, 0.05) 40px),
     /* 1. Tactical overlay */
-    linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.90));
+    linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.90));
 }
 
 #root {
@@ -85,14 +94,22 @@ body {
   font-family: 'Rajdhani', sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6, .display-font {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.display-font {
   font-family: 'Orbitron', sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.15em;
   margin: 0;
 }
 
-code, pre, .mono-font {
+code,
+pre,
+.mono-font {
   font-family: 'JetBrains Mono', 'Share Tech Mono', monospace;
 }
 
@@ -109,19 +126,24 @@ code, pre, .mono-font {
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: #161A22;
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--border);
   border-radius: 3px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent-primary);
 }
+
 ::-webkit-scrollbar-corner {
   background: var(--bg-base);
 }
+
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--border) var(--bg-panel);
@@ -137,11 +159,14 @@ code, pre, .mono-font {
    GLOBAL KEYFRAME ANIMATIONS
    ======================================== */
 @keyframes pulseGlow {
-  0%, 100% {
-    box-shadow: 0 0 15px var(--glow), inset 0 0 8px rgba(124, 157, 255,0.1);
+
+  0%,
+  100% {
+    box-shadow: 0 0 15px var(--glow), inset 0 0 8px rgba(124, 157, 255, 0.1);
   }
+
   50% {
-    box-shadow: 0 0 30px var(--glow-strong), inset 0 0 15px rgba(124, 157, 255,0.2);
+    box-shadow: 0 0 30px var(--glow-strong), inset 0 0 15px rgba(124, 157, 255, 0.2);
   }
 }
 
@@ -150,6 +175,7 @@ code, pre, .mono-font {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -157,43 +183,104 @@ code, pre, .mono-font {
 }
 
 @keyframes scanSweep {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100vh); }
+  0% {
+    transform: translateY(-100%);
+  }
+
+  100% {
+    transform: translateY(100vh);
+  }
 }
 
 @keyframes radarSweep {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
 }
 
 @keyframes drift {
-  from { transform: translateY(0); }
-  to { transform: translateY(-100vh); }
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-100vh);
+  }
 }
 
 /* Upward drift variation for elements like datastream */
 @keyframes dataDrift {
-  0% { transform: translateY(100%) scale(1); opacity: 0; }
-  10% { opacity: 0.8; }
-  90% { opacity: 0.8; }
-  100% { transform: translateY(-100vh) scale(0.9); opacity: 0; }
+  0% {
+    transform: translateY(100%) scale(1);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 0.8;
+  }
+
+  90% {
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: translateY(-100vh) scale(0.9);
+    opacity: 0;
+  }
 }
 
 @keyframes borderPulse {
-  0%, 100% { border-color: rgba(124, 157, 255, 0.3); }
-  50% { border-color: rgba(124, 157, 255, 0.8); }
+
+  0%,
+  100% {
+    border-color: rgba(124, 157, 255, 0.3);
+  }
+
+  50% {
+    border-color: rgba(124, 157, 255, 0.8);
+  }
 }
 
 @keyframes glitchHack {
-  0%, 100% { transform: translate(0, 0); clip-path: inset(0 0 0 0); }
-  10% { transform: translate(-3px, 1px); clip-path: inset(20% 0 60% 0); text-shadow: 3px 0 var(--danger), -3px 0 var(--accent-primary); }
-  20% { transform: translate(2px, -2px); clip-path: inset(0 0 0 0); text-shadow: 3px 0 var(--danger), -3px 0 var(--accent-primary); }
-  30% { transform: translate(-1px, -1px); text-shadow: 0 0 10px var(--accent-primary); }
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+    clip-path: inset(0 0 0 0);
+  }
+
+  10% {
+    transform: translate(-3px, 1px);
+    clip-path: inset(20% 0 60% 0);
+    text-shadow: 3px 0 var(--danger), -3px 0 var(--accent-primary);
+  }
+
+  20% {
+    transform: translate(2px, -2px);
+    clip-path: inset(0 0 0 0);
+    text-shadow: 3px 0 var(--danger), -3px 0 var(--accent-primary);
+  }
+
+  30% {
+    transform: translate(-1px, -1px);
+    text-shadow: 0 0 10px var(--accent-primary);
+  }
 }
 
 /* ========================================
@@ -235,6 +322,7 @@ code, pre, .mono-font {
   transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
+  min-height: 44px;
 }
 
 .tactical-btn:hover:not(:disabled) {
@@ -256,8 +344,10 @@ code, pre, .mono-font {
 .tactical-btn::before {
   content: '';
   position: absolute;
-  top: 0; left: -100%;
-  width: 100%; height: 100%;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
   transition: left 0.5s ease;
 }
@@ -384,7 +474,10 @@ code, pre, .mono-font {
 /* Data Stream floating text layer */
 .data-stream-layer {
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   pointer-events: none;
   overflow: hidden;
   z-index: 1;
@@ -458,4 +551,16 @@ a {
 a:hover {
   color: var(--accent-primary);
   text-shadow: 0 0 8px var(--glow);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

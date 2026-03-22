@@ -1,5 +1,6 @@
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { FullScreenStatus } from "./FullScreenStatus";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -10,7 +11,7 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
 
   // Wait for auth state to be loaded before redirecting
   if (loading) {
-    return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>Loading...</div>;
+    return <FullScreenStatus subtitle="VERIFYING TEAM CREDENTIALS..." />;
   }
 
   if (!isAuthenticated) {
