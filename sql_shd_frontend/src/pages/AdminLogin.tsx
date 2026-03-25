@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAdmin } from '../contexts/AdminContext';
 import { ShieldAlert, Shield } from 'lucide-react';
-import './AdminLogin.css';
+import './Login.css';
 
 export default function AdminLogin() {
   const [password, setPassword] = useState('');
