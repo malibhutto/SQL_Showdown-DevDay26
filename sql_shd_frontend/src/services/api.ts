@@ -6,8 +6,8 @@
  */
 
 // API Base URL - Change this when connecting to a real backend
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
-
+// export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+export const API_BASE_URL = import.meta.env.VITE_API_URL;
 /**
  * Standard API response wrapper
  */
@@ -57,7 +57,7 @@ export async function apiClient<T>(
   const { method = 'GET', body, headers = {} } = options;
 
   const token = getAuthToken();
-  
+
   const requestHeaders: Record<string, string> = {
     'Content-Type': 'application/json',
     ...headers,
@@ -102,18 +102,18 @@ export async function apiClient<T>(
  * Convenience methods for common HTTP operations
  */
 export const api = {
-  get: <T>(endpoint: string, headers?: Record<string, string>) => 
+  get: <T>(endpoint: string, headers?: Record<string, string>) =>
     apiClient<T>(endpoint, { method: 'GET', headers }),
-  
-  post: <T>(endpoint: string, body: unknown, headers?: Record<string, string>) => 
+
+  post: <T>(endpoint: string, body: unknown, headers?: Record<string, string>) =>
     apiClient<T>(endpoint, { method: 'POST', body, headers }),
-  
-  put: <T>(endpoint: string, body: unknown, headers?: Record<string, string>) => 
+
+  put: <T>(endpoint: string, body: unknown, headers?: Record<string, string>) =>
     apiClient<T>(endpoint, { method: 'PUT', body, headers }),
-  
-  patch: <T>(endpoint: string, body: unknown, headers?: Record<string, string>) => 
+
+  patch: <T>(endpoint: string, body: unknown, headers?: Record<string, string>) =>
     apiClient<T>(endpoint, { method: 'PATCH', body, headers }),
-  
-  delete: <T>(endpoint: string, headers?: Record<string, string>) => 
+
+  delete: <T>(endpoint: string, headers?: Record<string, string>) =>
     apiClient<T>(endpoint, { method: 'DELETE', headers }),
 };
