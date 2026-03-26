@@ -7,12 +7,12 @@ async function startServer() {
   try {
     // Connect to database
     await connectDatabase();
-    
+
     // Create Express app
     const app = createApp();
-    
+
     // Start listening
-    const server = app.listen(config.port, () => {
+    const server = app.listen(Number(config.port), '0.0.0.0', () => {
       console.log('🚀 Query Quest Backend Server');
       console.log(`📡 Server running on port ${config.port}`);
       console.log(`🌍 Environment: ${config.nodeEnv}`);
@@ -30,43 +30,43 @@ async function startServer() {
       console.log('  GET  /api/run/submissions');
       console.log('');
     });
-    
+
     // Graceful shutdown
     const gracefulShutdown = async (signal: string) => {
       console.log(`\n${signal} received. Starting graceful shutdown...`);
-      
+
       server.close(async () => {
         console.log('✅ HTTP server closed');
-        
+
         await disconnectDatabase();
         console.log('✅ Database disconnected');
-        
+
         console.log('👋 Shutdown complete');
         process.exit(0);
       });
-      
+
       // Force shutdown after 10 seconds
       setTimeout(() => {
         console.error('⚠️  Forced shutdown after timeout');
         process.exit(1);
       }, 10000);
     };
-    
+
     // Handle shutdown signals
     process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
     process.on('SIGINT', () => gracefulShutdown('SIGINT'));
-    
+
     // Handle uncaught errors
     process.on('uncaughtException', (error) => {
       console.error('❌ Uncaught Exception:', error);
       gracefulShutdown('UNCAUGHT_EXCEPTION');
     });
-    
+
     process.on('unhandledRejection', (reason, promise) => {
       console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason);
       gracefulShutdown('UNHANDLED_REJECTION');
     });
-    
+
   } catch (error) {
     console.error('❌ Failed to start server:', error);
     process.exit(1);
