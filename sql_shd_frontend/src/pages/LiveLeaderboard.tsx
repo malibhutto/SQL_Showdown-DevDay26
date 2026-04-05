@@ -99,7 +99,7 @@ const LiveLeaderboard: React.FC = () => {
               leaderboard.map((entry, idx) => (
                 <div
                   key={entry.teamName}
-                  className={`table-row flex items-center px-4 py-4 border-b border-warning/10 transition-colors hover:bg-warning/5 bg-black/40
+                  className={`leaderboard-row flex items-center px-4 py-2.5 border-b border-warning/10 transition-colors hover:bg-warning/5 bg-black/40
                     ${entry.rank <= 3 ? `rank-${getRankBadgeClass(entry.rank)}` : ''} 
                   `}
                   style={{
@@ -110,7 +110,7 @@ const LiveLeaderboard: React.FC = () => {
                 >
                   <div className="col-rank w-24 flex justify-center">
                     <span
-                      className={`rank-badge font-orbitron text-xl font-bold w-12 h-12 flex items-center justify-center rounded-sm border 
+                      className={`rank-badge font-orbitron text-lg font-bold w-10 h-10 flex items-center justify-center rounded-sm border 
                         ${entry.rank === 1 ? 'border-gold text-gold bg-gold/10 shadow-[0_0_15px_rgba(255,215,0,0.3)]' :
                           entry.rank === 2 ? 'border-silver text-silver bg-silver/10 shadow-[0_0_15px_rgba(192,192,192,0.3)]' :
                           entry.rank === 3 ? 'border-bronze text-bronze bg-bronze/10 shadow-[0_0_15px_rgba(205,127,50,0.3)]' :
@@ -128,7 +128,7 @@ const LiveLeaderboard: React.FC = () => {
                     </span>
                   </div>
                   <div className="col-team flex-1 pl-4">
-                    <div className="font-mono text-xl font-bold tracking-wider m-0 text-white flex items-center gap-3">
+                    <div className="font-mono text-lg font-bold tracking-wider m-0 text-white flex items-center gap-3">
                       {entry.teamName}
                       {entry.rank === 1 && <span className="text-[10px] text-black bg-gold px-2 py-0.5 rounded-sm font-orbitron tracking-widest animate-pulse">VIP TARGET</span>}
                     </div>
@@ -139,7 +139,7 @@ const LiveLeaderboard: React.FC = () => {
                     </div>
                   </div>
                   <div className="col-points w-32 text-right">
-                    <span className={`points-value font-orbitron text-2xl font-bold ${entry.rank <= 3 ? 'text-white' : 'text-warning'}`}>{entry.totalPoints}</span>
+                    <span className={`points-value font-orbitron text-xl font-bold ${entry.rank <= 3 ? 'text-white' : 'text-warning'}`}>{entry.totalPoints}</span>
                   </div>
                   <div className="col-solved w-32 flex justify-center">
                     <span className="solved-badge font-mono text-sm border border-warning/40 text-warning px-3 py-1 bg-warning/10 shadow-[inset_0_0_10px_rgba(250, 204, 21,0.1)]">

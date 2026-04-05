@@ -13,6 +13,7 @@ async function startServer() {
 
     // Start listening
     const server = app.listen(Number(config.port), '0.0.0.0', () => {
+      // const server = app.listen(Number(config.port), () => {
       console.log('🚀 Query Quest Backend Server');
       console.log(`📡 Server running on port ${config.port}`);
       console.log(`🌍 Environment: ${config.nodeEnv}`);
